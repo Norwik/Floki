@@ -20,10 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import logging, json, sys, click
+import click
+import logging, json, sys
 from oranda import __version__
 
-main = click.Group(help="A Lightweight and Flexible Ansible Command Line Tool")
+main = click.Group(help="🐺 A Lightweight and Flexible Ansible Command Line Tool")
 
 @main.command("key", help="Get key from JSON object")
 @click.option("-i", "--input", "infile", type=click.File(), default=sys.stdin, help="Input file name")

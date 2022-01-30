@@ -20,9 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import pytest
 
+class Host():
 
-def test_client():
-    """Client Tests"""
-    assert True == True
+	def __init__(self):
+		pass

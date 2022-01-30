@@ -20,20 +20,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import pytest
+from oranda.command.database import Database
 
-import sys
 
-if sys.version_info[:2] >= (3, 8):
-    # TODO: Import directly (no need for conditional) when `python_requires = >= 3.8`
-    from importlib.metadata import PackageNotFoundError, version  # pragma: no cover
-else:
-    from importlib_metadata import PackageNotFoundError, version  # pragma: no cover
+def test_database():
+    """Database Tests"""
+    db = Database("cache/oranda.db")
+    assert db.connect() == 0
 
-try:
-    # Change here if project is renamed and does not equal the package name
-    dist_name = __name__
-    __version__ = version(dist_name)
-except PackageNotFoundError:  # pragma: no cover
-    __version__ = "unknown"
-finally:
-    del version, PackageNotFoundError
+    db.migrate()
+    db.delete("c.com")
+
+    assert db.insert("c.com", {"ip": "127.0.0.1"}) == 1
+    assert db.get("c.com") == {"ip": "127.0.0.1"}
+    assert db.get("f.com") == None
+    assert len(db.list()) == 1
