@@ -24,7 +24,7 @@ import json
 import sqlite3
 
 
-class Database():
+class Database:
     """Database Class"""
 
     def __init__(self, path):

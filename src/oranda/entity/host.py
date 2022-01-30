@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 
-class Host():
+class Host:
     """Host Class"""
 
     def __init__(self):

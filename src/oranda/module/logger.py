@@ -20,46 +20,27 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import click
-import logging, json, sys
-from oranda import __version__
+import logging
 
 
-@click.group(help="🐺 A Lightweight and Flexible Ansible Command Line Tool")
-@click.version_option(version=__version__, help="Show the current version")
-def main():
-    pass
+class Logger:
+    """Logger Class"""
 
-@click.group(help='Manage hosts')
-def host():
-    pass
+    loggers = {}
 
-@host.command(help='Get a host')
-def get():
-    click.echo('Get host')
+    def get_logger(self, name=__name__):
+        """
+        Get logger instance by name
 
-@host.command(help='List all hosts')
-@click.option("-t", "--tag", "tag", type=click.STRING, default="", help="Host tags")
-def list(tag):
-    if tag:
-        click.echo(f'List hosts with tag {tag}')
-    else:
-        click.echo('List all hosts')
+        Args:
+            name: logger identifier
 
-@host.command(help='Delete a host')
-def delete():
-    click.echo('Delete host')
+        Returns:
+            An instance of logging.Logger
+        """
+        if name in self.loggers:
+            return self.loggers[name]
 
-@click.group(help='Manage playbooks')
-def playbook():
-    pass
+        self.loggers[name] = logging.getLogger(name)
 
-@playbook.command(help='List all playbooks')
-def list():
-    click.echo('List playbooks')
-
-main.add_command(host)
-main.add_command(playbook)
-
-if __name__ == '__main__':
-    main()
+        return self.loggers[name]

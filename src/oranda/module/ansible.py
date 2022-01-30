@@ -20,9 +20,43 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import ansible_runner
 
-class Ansible():
-    """Ansible Class"""
+from oranda.module.logger import Logger
+from oranda.module.file_system import FileSystem
+
+
+class Ansible:
+    """Ansible Module"""
 
     def __init__(self):
-        pass
+        self.file_system = FileSystem()
+        self.logger = Logger().get_logger(__name__)
+
+    def run(self, data_dir, playbook, inventory):
+        """
+        Run Ansible Playbook
+        """
+        out = ansible_runner.run(
+            private_data_dir=data_dir,
+            playbook=playbook,
+            inventory=inventory,
+            quiet=True,
+        )
+
+        if out.status.lower() == "failed":
+            return False
+
+        elif out.status.lower() == "successful":
+            return True
+
+        return False
+
+    def cleanup(self, path):
+        """
+        Cleanup Plan Directory
+        """
+        try:
+            self.file_system.delete_directory(path)
+        except Exception:
+            pass
