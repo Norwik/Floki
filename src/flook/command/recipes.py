@@ -23,6 +23,7 @@
 import uuid
 import click
 import yaml
+from yaspin import yaspin
 
 from flook.model.recipe import Recipe
 from flook.module.logger import Logger
@@ -30,6 +31,8 @@ from flook.module.database import Database
 from flook.module.output import Output
 from flook.module.config import Config
 from flook.module.file_system import FileSystem
+from flook.module.playbook import Playbook
+from flook.module.ansible import Ansible
 
 
 class Recipes:
@@ -171,5 +174,16 @@ class Recipes:
         if len(hosts) == 0:
             raise click.ClickException(f"No hosts matching!")
 
-        print(hosts)
-        print(recipe)
+        with yaspin(text="Running recipe..", color="cyan") as sp:
+            pb_id = str(uuid.uuid4())
+            pb = Playbook(
+                pb_id, self._configs["cache"]["path"].rstrip("/"), hosts, recipe
+            )
+            pb.build()
+            result = pb.run()
+            pb.cleanup()
+
+            if result:
+                sp.write("Recipe finished successfully!")
+            else:
+                sp.write("Oops! recipe failed.")

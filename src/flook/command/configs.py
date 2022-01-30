@@ -46,7 +46,10 @@ class Configs:
         if self._home == "":
             raise click.ClickException("User home path is not defined")
 
-        base = {"database": {"type": "file", "path": "{}/flook.db".format(self._home)}}
+        base = {
+            "database": {"type": "file", "path": "{}/flook.db".format(self._home)},
+            "cache": {"path": "/tmp"},
+        }
 
         self.database.connect("{}/flook.db".format(self._home))
         self.database.migrate()
