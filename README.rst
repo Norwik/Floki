@@ -48,6 +48,7 @@ To use flook, follow the following steps:
 
 .. code-block::
 
+    $ flook recipe add <recipe_name> -p <recipe_relative_path>
     $ flook recipe add clivern/nginx -p recipe/nginx
 
 
@@ -55,6 +56,7 @@ To use flook, follow the following steps:
 
 .. code-block::
 
+    $ flook host add <host_name> -i <host_ip> -p <ssh_port> -u <ssh_username> -s <ssh_key_path>
     $ flook host add example.com -i 127.0.0.1 -p 22 -u root -s /Users/root/.ssh/id_rsa.pem
 
 
@@ -62,4 +64,5 @@ To use flook, follow the following steps:
 
 .. code-block::
 
+    $ flook recipe run <recipe_name> -h <host_name>
     $ flook recipe run clivern/nginx -h example.com
