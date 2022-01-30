@@ -22,6 +22,7 @@
 
 
 class Host():
+    """Host Class"""
 
-	def __init__(self):
-		pass
+    def __init__(self):
+        pass
