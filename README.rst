@@ -37,31 +37,50 @@ To use flook, follow the following steps:
     $ flook --help
 
 
-4. Init the config file and the database
+4. Init the config file and the sqlite database
 
 .. code-block::
 
     $ flook config init
 
 
-5. Add a recipe
+5. To edit configs
+
+.. code-block::
+
+    $ flook config init
+
+
+6. Add a recipe
 
 .. code-block::
 
     $ flook recipe add <recipe_name> -p <recipe_relative_path>
     $ flook recipe add clivern/nginx -p recipe/nginx
 
-    # To list recipes
+
+7. To list recipes
+
+.. code-block::
+
     $ flook recipe list
 
-    # To get a recipe
+
+8. To get a recipe
+
+.. code-block::
+
     $ flook recipe get <recipe_name>
 
-    # To delete a recipe
+
+9. To delete a recipe
+
+.. code-block::
+
     $ flook recipe delete <recipe_name>
 
 
-6. Add a host
+10. Add a host
 
 .. code-block::
 
@@ -69,7 +88,28 @@ To use flook, follow the following steps:
     $ flook host add example.com -i 127.0.0.1 -p 22 -u root -s /Users/root/.ssh/id_rsa.pem
 
 
-7. Run a recipe towards a host
+11. To list hosts
+
+.. code-block::
+
+    $ flook host list
+
+
+12. To get a host
+
+.. code-block::
+
+    $ flook host get <host_name>
+
+
+13. To delete a host
+
+.. code-block::
+
+    $ flook host delete <host_name>
+
+
+14. Run a recipe towards a host
 
 .. code-block::
 
