@@ -55,7 +55,7 @@ To use flook, follow the following steps:
 
 .. code-block::
 
-    $ flook host add example.com -i 127.0.0.1 -p 22 -u root -s /Users/room/.ssh/id_rsa.pem
+    $ flook host add example.com -i 127.0.0.1 -p 22 -u root -s /Users/root/.ssh/id_rsa.pem
 
 
 7. Run a recipe towards a host
