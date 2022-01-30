@@ -23,6 +23,9 @@
 import json
 import sqlite3
 
+from flook.model.host import Host
+from flook.model.recipe import Recipe
+
 
 class Database:
     """Database Class"""
@@ -30,60 +33,97 @@ class Database:
     def connect(self, path):
         """Connect into a database"""
         self.path = path
+
         self._connection = sqlite3.connect(self.path)
+
         return self._connection.total_changes
 
     def migrate(self):
         cursor = self._connection.cursor()
 
         cursor.execute(
-            "CREATE TABLE IF NOT EXISTS host (name TEXT, config TEXT, createdAt TEXT)"
+            "CREATE TABLE IF NOT EXISTS host (id TEXT, name TEXT, config TEXT, createdAt TEXT, updatedAt TEXT)"
         )
         cursor.execute(
-            "CREATE TABLE IF NOT EXISTS recipe (name TEXT, config TEXT, createdAt TEXT)"
+            "CREATE TABLE IF NOT EXISTS recipe (id TEXT, name TEXT, config TEXT, createdAt TEXT, updatedAt TEXT)"
+        )
+        cursor.execute(
+            "CREATE TABLE IF NOT EXISTS task (id TEXT, name TEXT, payload TEXT, result TEXT, createdAt TEXT, updatedAt TEXT)"
         )
 
         cursor.close()
         self._connection.commit()
 
-    def delete_host(self, host):
+    def delete_host(self, name):
         """Delete a row by host name"""
         cursor = self._connection.cursor()
 
-        cursor.execute("DELETE FROM host WHERE name = ?", (host,))
+        cursor.execute("DELETE FROM host WHERE name = ?", (name,))
 
         cursor.close()
+
         self._connection.commit()
 
-    def get_host(self, host):
+    def get_host(self, name):
         """Get a row by host name"""
         cursor = self._connection.cursor()
 
         rows = cursor.execute(
-            "SELECT name, config, createdAt FROM host WHERE name = '{}'".format(host)
+            "SELECT id, name, config, createdAt, updatedAt FROM host WHERE name = '{}'".format(
+                name
+            )
         ).fetchall()
 
         cursor.close()
 
         if len(rows) > 0:
-            result = json.loads(rows[0][1])
-            result["createdAt"] = rows[0][2]
-            return result
+            for row in rows:
+                data = json.loads(row[2])
+
+                host = Host(
+                    row[0],
+                    row[1],
+                    data["connection"],
+                    data["ip"],
+                    data["port"],
+                    data["user"],
+                    data["password"],
+                    data["ssh_private_key"],
+                    data["tags"],
+                    row[3],
+                    row[4],
+                )
+
+                return host
         else:
             return None
 
-    def insert_host(self, host, configs={}):
+    def insert_host(self, host):
         """Insert a new row"""
         cursor = self._connection.cursor()
 
         result = cursor.execute(
-            "INSERT INTO host VALUES ('{}', '{}', datetime('now'))".format(
-                host, json.dumps(configs)
+            "INSERT INTO host VALUES ('{}', '{}', '{}', datetime('now'), datetime('now'))".format(
+                host.id,
+                host.name,
+                json.dumps(
+                    {
+                        "connection": host.connection,
+                        "ip": host.ip,
+                        "port": host.port,
+                        "user": host.user,
+                        "password": host.password,
+                        "ssh_private_key": host.ssh_private_key,
+                        "tags": host.tags,
+                    }
+                ),
             )
         )
 
         cursor.close()
+
         self._connection.commit()
+
         return result.rowcount
 
     def list_hosts(self):
@@ -91,56 +131,92 @@ class Database:
         result = []
 
         cursor = self._connection.cursor()
-        rows = cursor.execute("SELECT name, config, createdAt FROM host").fetchall()
+        rows = cursor.execute(
+            "SELECT id, name, config, createdAt, updatedAt FROM host"
+        ).fetchall()
         cursor.close()
 
         for row in rows:
-            result.append(
-                {"name": row[0], "config": json.loads(row[1]), "createdAt": row[2]}
+            data = json.loads(row[2])
+
+            host = Host(
+                row[0],
+                row[1],
+                data["connection"],
+                data["ip"],
+                data["port"],
+                data["user"],
+                data["password"],
+                data["ssh_private_key"],
+                data["tags"],
+                row[3],
+                row[4],
             )
+
+            result.append(host)
 
         return result
 
-    def delete_recipe(self, recipe):
+    def delete_recipe(self, name):
         """Delete a row by recipe name"""
         cursor = self._connection.cursor()
 
-        cursor.execute("DELETE FROM recipe WHERE name = ?", (recipe,))
+        cursor.execute("DELETE FROM recipe WHERE name = ?", (name,))
 
         cursor.close()
+
         self._connection.commit()
 
-    def get_recipe(self, recipe):
+    def get_recipe(self, name):
         """Get a row by recipe name"""
         cursor = self._connection.cursor()
 
         rows = cursor.execute(
-            "SELECT name, config, createdAt FROM recipe WHERE name = '{}'".format(
-                recipe
+            "SELECT id, name, config, createdAt, updatedAt FROM recipe WHERE name = '{}'".format(
+                name
             )
         ).fetchall()
 
         cursor.close()
 
         if len(rows) > 0:
-            result = json.loads(rows[0][1])
-            result["createdAt"] = rows[0][2]
-            return result
+            for row in rows:
+                data = json.loads(row[2])
+                recipe = Recipe(
+                    row[0],
+                    row[1],
+                    data["recipe"],
+                    data["templates"],
+                    data["tags"],
+                    row[3],
+                    row[4],
+                )
+                return recipe
         else:
             return None
 
-    def insert_recipe(self, recipe, configs={}):
+    def insert_recipe(self, recipe):
         """Insert a new row"""
         cursor = self._connection.cursor()
 
         result = cursor.execute(
-            "INSERT INTO recipe VALUES ('{}', '{}', datetime('now'))".format(
-                recipe, json.dumps(configs)
+            "INSERT INTO recipe VALUES ('{}', '{}', '{}', datetime('now'), datetime('now'))".format(
+                recipe.id,
+                recipe.name,
+                json.dumps(
+                    {
+                        "recipe": recipe.recipe,
+                        "templates": recipe.templates,
+                        "tags": recipe.tags,
+                    }
+                ),
             )
         )
 
         cursor.close()
+
         self._connection.commit()
+
         return result.rowcount
 
     def list_recipes(self):
@@ -148,12 +224,22 @@ class Database:
         result = []
 
         cursor = self._connection.cursor()
-        rows = cursor.execute("SELECT name, config, createdAt FROM recipe").fetchall()
+        rows = cursor.execute(
+            "SELECT id, name, config, createdAt, updatedAt FROM recipe"
+        ).fetchall()
         cursor.close()
 
         for row in rows:
-            result.append(
-                {"name": row[0], "config": json.loads(row[1]), "createdAt": row[2]}
+            data = json.loads(row[2])
+            recipe = Recipe(
+                row[0],
+                row[1],
+                data["recipe"],
+                data["templates"],
+                data["tags"],
+                row[3],
+                row[4],
             )
+            result.append(recipe)
 
         return result

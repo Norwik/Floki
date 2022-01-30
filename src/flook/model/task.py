@@ -20,50 +20,45 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import json
-from re import sub
-from prettytable import PrettyTable
 
+class Task:
+    """Task Model"""
 
-class Output:
-    """Output Class"""
+    def __init__(self, id, name, payload, result, created_at, updated_at):
+        """Class Constructor"""
+        self._id = id
+        self._name = name
+        self._payload = payload
+        self._result = result
+        self._created_at = created_at
+        self._updated_at = updated_at
 
-    JSON = "JSON"
-    DEFAULT = "DEFAULT"
+    @property
+    def id(self):
+        """Task ID"""
+        return self._id
 
-    def _table(self, data):
-        """Output data as Table"""
-        headers = []
-        rows = []
+    @property
+    def name(self):
+        """Task Name"""
+        return self._name
 
-        for item in data:
-            headers = item.keys()
-            rows.append(item.values())
+    @property
+    def payload(self):
+        """Task Payload"""
+        return self._payload
 
-        x = PrettyTable()
-        x.field_names = headers
-        x.add_rows(rows)
+    @property
+    def result(self):
+        """Task Result"""
+        return self._result
 
-        return x
+    @property
+    def created_at(self):
+        """Task Created At"""
+        return self._created_at
 
-    def _json(self, data):
-        """Output data as JSON"""
-        new = []
-
-        for item in data:
-            new.append({self.camel_case(k): v for k, v in item.items()})
-
-        return json.dumps(new)
-
-    def render(self, data, typ):
-        """Render Data to the Console"""
-        if typ == Output.JSON:
-            return self._json(data)
-
-        return self._table(data)
-
-    def camel_case(self, value):
-        """Change string into camel case"""
-        value = sub(r"(_|-)+", " ", value).title().replace(" ", "")
-
-        return ''.join([value[0].lower(), value[1:]])
+    @property
+    def updated_at(self):
+        """Task Updated At"""
+        return self._updated_at

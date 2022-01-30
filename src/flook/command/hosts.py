@@ -22,6 +22,7 @@
 
 import click
 
+from flook.model.host import Host
 from flook.module.logger import Logger
 from flook.module.database import Database
 from flook.module.output import Output
@@ -44,34 +45,33 @@ class Hosts:
         self.database.migrate()
         return self
 
-    def add(self, name, configs):
+    def add(self, host):
         """Add a new host"""
-        configs["ssh_private_key_file"] = configs["ssh_private_key_file"].read()
+        if self.database.get_host(host.name) is not None:
+            raise click.ClickException(f"Host with name {host.name} exists")
 
-        if self.database.get_host(name) is not None:
-            raise click.ClickException(f"Host with name {name} exists")
+        self.database.insert_host(host)
 
-        self.database.insert_host(name, configs)
-        click.echo(f"Host with name {name} got created")
+        click.echo(f"Host with name {host.name} got created")
 
     def list(self, tag, output):
         """List hosts"""
         data = []
-        result = self.database.list_hosts()
+        hosts = self.database.list_hosts()
 
-        for item in result:
-            if tag != "" and tag not in item["config"]["tags"]:
+        for host in hosts:
+            if tag != "" and tag not in host.tags:
                 continue
 
             data.append(
                 {
-                    "Name": item["name"],
-                    "Host": item["config"]["host"],
-                    "Connection": item["config"]["connection"].upper(),
-                    "Tags": ", ".join(item["config"]["tags"])
-                    if len(item["config"]["tags"]) > 0
-                    else "-",
-                    "Created at": item["createdAt"],
+                    "ID": host.id,
+                    "Name": host.name,
+                    "IP": host.ip,
+                    "Connection": host.connection.upper(),
+                    "Tags": ", ".join(host.tags) if len(host.tags) > 0 else "-",
+                    "Created at": host.created_at,
+                    "Updated at": host.updated_at,
                 }
             )
 
@@ -86,18 +86,20 @@ class Hosts:
 
     def get(self, name, output):
         """Get a host"""
-        result = self.database.get_host(name)
+        host = self.database.get_host(name)
 
-        if result is None:
+        if host is None:
             raise click.ClickException(f"Host with name {name} not found")
 
         data = [
             {
-                "Name": name,
-                "Host": result["host"],
-                "Connection": result["connection"].upper(),
-                "Tags": ", ".join(result["tags"]) if len(result["tags"]) > 0 else "-",
-                "Created at": result["createdAt"],
+                "ID": host.id,
+                "Name": host.name,
+                "IP": host.ip,
+                "Connection": host.connection.upper(),
+                "Tags": ", ".join(host.tags) if len(host.tags) > 0 else "-",
+                "Created at": host.created_at,
+                "Updated at": host.updated_at,
             }
         ]
 
@@ -110,4 +112,5 @@ class Hosts:
     def delete(self, name):
         """Delete a host"""
         self.database.delete_host(name)
+
         click.echo(f"Host with name {name} got deleted")

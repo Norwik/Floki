@@ -20,9 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import uuid
 import click
 import yaml
 
+from flook.model.recipe import Recipe
 from flook.module.logger import Logger
 from flook.module.database import Database
 from flook.module.output import Output
@@ -76,28 +78,30 @@ class Recipes:
                         }
                     )
 
-        self.database.insert_recipe(
-            name, {"recipe": recipe, "templates": templates, "tags": configs["tags"]}
+        recipe = Recipe(
+            str(uuid.uuid4()), name, recipe, templates, configs["tags"], None, None
         )
+
+        self.database.insert_recipe(recipe)
 
         click.echo(f"Recipe with name {name} got created")
 
     def list(self, tag, output):
         """List Recipes"""
         data = []
-        result = self.database.list_recipes()
+        recipes = self.database.list_recipes()
 
-        for item in result:
-            if tag != "" and tag not in item["config"]["tags"]:
+        for recipe in recipes:
+            if tag != "" and tag not in recipe.tags:
                 continue
 
             data.append(
                 {
-                    "Name": item["name"],
-                    "Tags": ", ".join(item["config"]["tags"])
-                    if len(item["config"]["tags"]) > 0
-                    else "-",
-                    "Created at": item["createdAt"],
+                    "ID": recipe.id,
+                    "Name": recipe.name,
+                    "Tags": ", ".join(recipe.tags) if len(recipe.tags) > 0 else "-",
+                    "Created at": recipe.created_at,
+                    "Updated at": recipe.updated_at,
                 }
             )
 
@@ -112,16 +116,18 @@ class Recipes:
 
     def get(self, name, output):
         """Get Recipe"""
-        result = self.database.get_recipe(name)
+        recipe = self.database.get_recipe(name)
 
-        if result is None:
-            raise click.ClickException(f"Recipe with name {name} not found")
+        if recipe is None:
+            raise click.ClickException(f"Recipe with name {recipe.name} not found")
 
         data = [
             {
-                "Name": name,
-                "Tags": ", ".join(result["tags"]) if len(result["tags"]) > 0 else "-",
-                "Created at": result["createdAt"],
+                "ID": recipe.id,
+                "Name": recipe.name,
+                "Tags": ", ".join(recipe.tags) if len(recipe.tags) > 0 else "-",
+                "Created at": recipe.created_at,
+                "Updated at": recipe.updated_at,
             }
         ]
 
@@ -134,4 +140,12 @@ class Recipes:
     def delete(self, name):
         """Delete a Recipe"""
         self.database.delete_recipe(name)
+
         click.echo(f"Recipe with name {name} got deleted")
+
+    def run(self, name, host, tag):
+        """Run a Recipe towards a host"""
+        # name is a recipe name
+        # host is the host name
+        # tag is the tag for hosts
+        pass

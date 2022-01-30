@@ -20,19 +20,51 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import pytest
-from flook.module.database import Database
 
+class Recipe:
+    """Recipe Model"""
 
-def test_database():
-    """Database Tests"""
-    db = Database()
-    assert db.connect("cache/flook.db") == 0
+    def __init__(self, id, name, recipe, templates, tags, created_at, updated_at):
+        """Class Constructor"""
+        self._id = id
+        self._name = name
+        self._recipe = recipe
+        self._templates = templates
+        self._tags = tags
+        self._created_at = created_at
+        self._updated_at = updated_at
 
-    db.migrate()
-    db.delete_host("c.com")
+    @property
+    def id(self):
+        """Recipe ID"""
+        return self._id
 
-    assert db.insert_host("c.com", {"ip": "127.0.0.1"}) == 1
-    assert db.get_host("c.com")["ip"] == "127.0.0.1"
-    assert db.get_host("f.com") == None
-    assert len(db.list_hosts()) == 1
+    @property
+    def name(self):
+        """Recipe Name"""
+        return self._name
+
+    @property
+    def recipe(self):
+        """Recipe Main"""
+        return self._recipe
+
+    @property
+    def templates(self):
+        """Recipe Templates"""
+        return self._templates
+
+    @property
+    def tags(self):
+        """Recipe Tags"""
+        return self._tags
+
+    @property
+    def created_at(self):
+        """Recipe Created At"""
+        return self._created_at
+
+    @property
+    def updated_at(self):
+        """Recipe Updated At"""
+        return self._updated_at

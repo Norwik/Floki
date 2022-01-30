@@ -20,10 +20,23 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+
 # @TODO this class should create a dir & create all the required
 # files for ansible to run against the host.
 class Playbook:
     """Playbook Class"""
 
     def __init__(self):
+        pass
+
+    def set_cache_dir(self, cache_dir):
+        pass
+
+    def set_hosts(self, hosts):
+        pass
+
+    def set_recipe(self, recipe):
+        pass
+
+    def build(self):
         pass

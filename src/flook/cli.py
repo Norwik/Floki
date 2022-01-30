@@ -20,12 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import uuid
 import click
 import logging, json, sys
 from flook import __version__
 from flook.command.configs import Configs
 from flook.command.hosts import Hosts
 from flook.command.recipes import Recipes
+from flook.model.host import Host
 
 
 @click.group(help="🐺 A Lightweight and Flexible Ansible Command Line Tool")
@@ -62,12 +64,12 @@ def list(tag, output):
     help="Connection type to the host",
 )
 @click.option(
-    "-h",
-    "--host",
-    "host",
+    "-i",
+    "--ip",
+    "ip",
     type=click.STRING,
     default="",
-    help="The name of the host to connect to",
+    help="The IP or hostname to connect to",
 )
 @click.option(
     "-p",
@@ -102,23 +104,22 @@ def list(tag, output):
     help="Private key file used by ssh",
 )
 @click.option("-t", "--tags", "tags", type=click.STRING, default="", help="Host tags")
-def add(name, connection, host, port, user, password, ssh_private_key_file, tags):
-    return (
-        Hosts()
-        .init()
-        .add(
-            name,
-            {
-                "connection": connection,
-                "host": host,
-                "port": port,
-                "user": user,
-                "password": password,
-                "ssh_private_key_file": ssh_private_key_file,
-                "tags": tags.split(",") if "," in tags else [],
-            },
-        )
+def add(name, connection, ip, port, user, password, ssh_private_key_file, tags):
+    host = Host(
+        str(uuid.uuid4()),
+        name,
+        connection,
+        ip,
+        port,
+        user,
+        password,
+        ssh_private_key_file.read(),
+        tags.split(",") if "," in tags else [],
+        None,
+        None,
     )
+
+    return Hosts().init().add(host)
 
 
 # Get host sub command
@@ -189,6 +190,29 @@ def get(name, output):
 @click.argument("name")
 def delete(name):
     return Recipes().init().delete(name)
+
+
+# Run recipe sub command
+@recipe.command(help="Run a recipe towards hosts")
+@click.argument("name")
+@click.option(
+    "-h",
+    "--host",
+    "host",
+    type=click.STRING,
+    default="",
+    help="The name of the host to run recipe towards",
+)
+@click.option(
+    "-t",
+    "--tag",
+    "tag",
+    type=click.STRING,
+    default="",
+    help="Hosts tag to run recipe towards",
+)
+def run(name, host, tag):
+    return Recipes().init().run(name, host, tag)
 
 
 # Manage configs command
