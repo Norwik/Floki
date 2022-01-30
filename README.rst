@@ -44,12 +44,21 @@ To use flook, follow the following steps:
     $ flook config init
 
 
-5. Add recipe
+5. Add a recipe
 
 .. code-block::
 
     $ flook recipe add <recipe_name> -p <recipe_relative_path>
     $ flook recipe add clivern/nginx -p recipe/nginx
+
+    # To list recipes
+    $ flook recipe list
+
+    # To get a recipe
+    $ flook recipe get <recipe_name>
+
+    # To delete a recipe
+    $ flook recipe delete <recipe_name>
 
 
 6. Add a host
