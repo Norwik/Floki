@@ -45,8 +45,11 @@ class Hosts:
         self.database.migrate()
         return self
 
-    def add(self, host):
+    def add(self, host, force):
         """Add a new host"""
+        if force:
+            self.database.delete_host(name)
+
         if self.database.get_host(host.name) is not None:
             raise click.ClickException(f"Host with name {host.name} exists")
 

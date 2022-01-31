@@ -51,10 +51,13 @@ class Recipes:
         self.database.migrate()
         return self
 
-    def add(self, name, configs):
+    def add(self, name, configs, force):
         """Add a Recipe"""
         recipe = ""
         templates = []
+
+        if force:
+            self.database.delete_recipe(name)
 
         if self.database.get_recipe(name) is not None:
             raise click.ClickException(f"Recipe with name {name} exists")

@@ -104,7 +104,8 @@ def list(tag, output):
     help="Private key file used by ssh",
 )
 @click.option("-t", "--tags", "tags", type=click.STRING, default="", help="Host tags")
-def add(name, connection, ip, port, user, password, ssh_private_key_file, tags):
+@click.option("-f", "--force", "force", is_flag=True, default=False, help="Force add")
+def add(name, connection, ip, port, user, password, ssh_private_key_file, tags, force):
     host = Host(
         str(uuid.uuid4()),
         name,
@@ -119,7 +120,7 @@ def add(name, connection, ip, port, user, password, ssh_private_key_file, tags):
         None,
     )
 
-    return Hosts().init().add(host)
+    return Hosts().init().add(host, force)
 
 
 # Get host sub command
@@ -157,11 +158,12 @@ def recipe():
     help="Path to the recipe",
 )
 @click.option("-t", "--tags", "tags", type=click.STRING, default="", help="Recipe tags")
-def add(name, path, tags):
+@click.option("-f", "--force", "force", is_flag=True, default=False, help="Force add")
+def add(name, path, tags, force):
     return (
         Recipes()
         .init()
-        .add(name, {"path": path, "tags": tags.split(",") if "," in tags else []})
+        .add(name, {"path": path, "tags": tags.split(",") if "," in tags else []}, force)
     )
 
 
