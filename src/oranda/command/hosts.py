@@ -24,6 +24,7 @@ import click
 
 from oranda.module.logger import Logger
 from oranda.module.database import Database
+from oranda.module.output import Output
 
 
 class Hosts:

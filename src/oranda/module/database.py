@@ -27,11 +27,9 @@ import sqlite3
 class Database:
     """Database Class"""
 
-    def __init__(self, path):
-        self.path = path
-
-    def connect(self):
+    def connect(self, path):
         """Connect into a database"""
+        self.path = path
         self._connection = sqlite3.connect(self.path)
         return self._connection.total_changes
 

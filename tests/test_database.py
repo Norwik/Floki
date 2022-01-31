@@ -26,8 +26,8 @@ from oranda.module.database import Database
 
 def test_database():
     """Database Tests"""
-    db = Database("cache/oranda.db")
-    assert db.connect() == 0
+    db = Database()
+    assert db.connect("cache/oranda.db") == 0
 
     db.migrate()
     db.delete_host("c.com")

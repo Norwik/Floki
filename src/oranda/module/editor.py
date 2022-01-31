@@ -20,37 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from prettytable import PrettyTable
 
-
-class Output:
-    """Output Class"""
-
-    JSON = "JSON"
-    DEFAULT = "DEFAULT"
-
-    def _table(self, data):
-        """Output data as Table"""
-        headers = []
-        rows = []
-
-        for item in data:
-            headers = data.keys()
-            rows.append(data.values())
-
-        x = PrettyTable()
-        x.field_names = headers
-        x.add_rows(rows)
-
-        print(x)
-
-    def _json(self, data):
-        """Output data as JSON"""
-        print(data)
-
-    def render(self, data, typ):
-        """Render Data to the Console"""
-        if typ == Output.JSON:
-            return self._json(data)
-
-        return self._table(data)
+class Editor:
+    """Editor Class"""
+    pass

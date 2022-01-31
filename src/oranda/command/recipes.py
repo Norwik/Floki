@@ -24,6 +24,7 @@ import click
 
 from oranda.module.logger import Logger
 from oranda.module.database import Database
+from oranda.module.output import Output
 
 
 class Recipes:
@@ -31,6 +32,7 @@ class Recipes:
 
     def __init__(self):
         self.database = Database()
+        self.output = Output()
         self.logger = Logger().get_logger(__name__)
 
     def add(self, name, configs):

@@ -23,6 +23,7 @@
 import click
 import logging, json, sys
 from oranda import __version__
+from oranda.command.configs import Configs
 from oranda.command.hosts import Hosts
 from oranda.command.recipes import Recipes
 from oranda.module.table import Table
@@ -104,8 +105,25 @@ def get(name, output):
 def delete(name):
     Recipes().delete(name)
 
+@click.group(help='Manage configs')
+def config():
+    pass
+
+@config.command(help='Init configurations')
+def init():
+    Configs().init()
+
+@config.command(help='Edit configurations')
+def edit():
+    Configs().edit()
+
+@config.command(help='Show configurations')
+def dump():
+    Configs().dump()
+
 main.add_command(host)
 main.add_command(recipe)
+main.add_command(config)
 
 if __name__ == '__main__':
     main()
