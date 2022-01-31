@@ -57,7 +57,7 @@ To use flook, follow the following steps:
 
     $ flook recipe add <recipe_name> -p <recipe_relative_path>
 
-    # Examples
+    # Some examples
     $ flook recipe add clivern/ping -p recipe/ping -f
     $ flook recipe add clivern/nginx -p recipe/nginx -f
     $ flook recipe add clivern/motd -p recipe/motd -f
@@ -130,6 +130,6 @@ To use flook, follow the following steps:
 
     $ flook recipe run <recipe_name> -h <host_name>
 
-    # Examples
+    # Some examples
     $ flook recipe run clivern/nginx -h example.com
     $ flook recipe run clivern/ping -h localhost
