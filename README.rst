@@ -11,6 +11,8 @@
 Oranda
 ======
 
+A Lightweight and Flexible Ansible Command Line Tool.
+
 To use oranda, follow the following steps:
 
 1. Create a python virtual environment.
