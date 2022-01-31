@@ -44,45 +44,46 @@ class Configs:
     def init(self):
         """Init Configs"""
         if self._home == "":
-            raise click.ClickException('User home path is not defined')
+            raise click.ClickException("User home path is not defined")
 
-        base = {
-            "database": {
-                "type": "file",
-                "path": "{}/oranda.db".format(self._home)
-            }
-        }
+        base = {"database": {"type": "file", "path": "{}/oranda.db".format(self._home)}}
 
         self.database.connect("{}/oranda.db".format(self._home))
         self.database.migrate()
 
-        self.file_system.write_file("{}/{}".format(self._home, Configs.FILE), yaml.dump(base))
+        self.file_system.write_file(
+            "{}/{}".format(self._home, Configs.FILE), yaml.dump(base)
+        )
 
-        click.echo("Config file {} got created!".format(
-            click.format_filename("{}/{}".format(self._home, Configs.FILE))
-        ))
+        click.echo(
+            "Config file {} got created!".format(
+                click.format_filename("{}/{}".format(self._home, Configs.FILE))
+            )
+        )
 
     def edit(self):
         """Edit Configs"""
         if self._home == "":
-            raise click.ClickException('User home path is not defined')
+            raise click.ClickException("User home path is not defined")
 
         if not self.file_system.file_exists("{}/{}".format(self._home, Configs.FILE)):
-            raise click.ClickException('Config file is missing')
+            raise click.ClickException("Config file is missing")
 
         click.edit(filename="{}/{}".format(self._home, Configs.FILE))
 
-        click.echo("Config file {} got updated!".format(
-            click.format_filename("{}/{}".format(self._home, Configs.FILE))
-        ))
+        click.echo(
+            "Config file {} got updated!".format(
+                click.format_filename("{}/{}".format(self._home, Configs.FILE))
+            )
+        )
 
     def dump(self):
         """Dump Configs"""
         if self._home == "":
-            raise click.ClickException('User home path is not defined')
+            raise click.ClickException("User home path is not defined")
 
         if not self.file_system.file_exists("{}/{}".format(self._home, Configs.FILE)):
-            raise click.ClickException('Config file is missing')
+            raise click.ClickException("Config file is missing")
 
         print("")
         print(self.file_system.read_file("{}/{}".format(self._home, Configs.FILE)))

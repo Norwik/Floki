@@ -46,13 +46,13 @@ class Hosts:
 
     def add(self, name, configs):
         """Add a new host"""
-        configs['ssh_private_key_file'] = configs["ssh_private_key_file"].read()
+        configs["ssh_private_key_file"] = configs["ssh_private_key_file"].read()
 
         if self.database.get_host(name) is not None:
-            raise click.ClickException(f'Host with name {name} exists')
+            raise click.ClickException(f"Host with name {name} exists")
 
         self.database.insert_host(name, configs)
-        click.echo(f'Host with name {name} got created')
+        click.echo(f"Host with name {name} got created")
 
     def list(self, tag, output):
         """List hosts"""
@@ -63,37 +63,51 @@ class Hosts:
             if tag != "" and tag not in item["config"]["tags"]:
                 continue
 
-            data.append({
-                "Name": item["name"],
-                "Host": item["config"]["host"],
-                "Connection": item["config"]["connection"].upper(),
-                "Tags": ", ".join(item["config"]["tags"]) if len(item["config"]["tags"]) > 0 else "-",
-                "Created at": item["createdAt"]
-            })
+            data.append(
+                {
+                    "Name": item["name"],
+                    "Host": item["config"]["host"],
+                    "Connection": item["config"]["connection"].upper(),
+                    "Tags": ", ".join(item["config"]["tags"])
+                    if len(item["config"]["tags"]) > 0
+                    else "-",
+                    "Created at": item["createdAt"],
+                }
+            )
 
         if len(data) == 0:
-            raise click.ClickException(f'No hosts found!')
+            raise click.ClickException(f"No hosts found!")
 
-        print(self.output.render(data, Output.JSON if output.lower() == "json" else Output.DEFAULT))
+        print(
+            self.output.render(
+                data, Output.JSON if output.lower() == "json" else Output.DEFAULT
+            )
+        )
 
     def get(self, name, output):
         """Get a host"""
         result = self.database.get_host(name)
 
         if result is None:
-            raise click.ClickException(f'Host with name {name} not found')
+            raise click.ClickException(f"Host with name {name} not found")
 
-        data = [{
-            "Name": name,
-            "Host": result["host"],
-            "Connection": result["connection"].upper(),
-            "Tags": ", ".join(result["tags"]) if len(result["tags"]) > 0 else "-",
-            "Created at": result["createdAt"]
-        }]
+        data = [
+            {
+                "Name": name,
+                "Host": result["host"],
+                "Connection": result["connection"].upper(),
+                "Tags": ", ".join(result["tags"]) if len(result["tags"]) > 0 else "-",
+                "Created at": result["createdAt"],
+            }
+        ]
 
-        print(self.output.render(data, Output.JSON if output.lower() == "json" else Output.DEFAULT))
+        print(
+            self.output.render(
+                data, Output.JSON if output.lower() == "json" else Output.DEFAULT
+            )
+        )
 
     def delete(self, name):
         """Delete a host"""
         self.database.delete_host(name)
-        click.echo(f'Host with name {name} got deleted')
+        click.echo(f"Host with name {name} got deleted")

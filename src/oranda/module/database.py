@@ -36,8 +36,12 @@ class Database:
     def migrate(self):
         cursor = self._connection.cursor()
 
-        cursor.execute("CREATE TABLE IF NOT EXISTS host (name TEXT, config TEXT, createdAt TEXT)")
-        cursor.execute("CREATE TABLE IF NOT EXISTS recipe (name TEXT, config TEXT, createdAt TEXT)")
+        cursor.execute(
+            "CREATE TABLE IF NOT EXISTS host (name TEXT, config TEXT, createdAt TEXT)"
+        )
+        cursor.execute(
+            "CREATE TABLE IF NOT EXISTS recipe (name TEXT, config TEXT, createdAt TEXT)"
+        )
 
         cursor.close()
         self._connection.commit()
@@ -46,10 +50,7 @@ class Database:
         """Delete a row by host name"""
         cursor = self._connection.cursor()
 
-        cursor.execute(
-            "DELETE FROM host WHERE name = ?",
-            (host,)
-        )
+        cursor.execute("DELETE FROM host WHERE name = ?", (host,))
 
         cursor.close()
         self._connection.commit()
@@ -58,7 +59,9 @@ class Database:
         """Get a row by host name"""
         cursor = self._connection.cursor()
 
-        rows = cursor.execute("SELECT name, config, createdAt FROM host WHERE name = '{}'".format(host)).fetchall()
+        rows = cursor.execute(
+            "SELECT name, config, createdAt FROM host WHERE name = '{}'".format(host)
+        ).fetchall()
 
         cursor.close()
 
@@ -73,10 +76,11 @@ class Database:
         """Insert a new row"""
         cursor = self._connection.cursor()
 
-        result = cursor.execute("INSERT INTO host VALUES ('{}', '{}', datetime('now'))".format(
-            host,
-            json.dumps(configs)
-        ))
+        result = cursor.execute(
+            "INSERT INTO host VALUES ('{}', '{}', datetime('now'))".format(
+                host, json.dumps(configs)
+            )
+        )
 
         cursor.close()
         self._connection.commit()
@@ -91,11 +95,9 @@ class Database:
         cursor.close()
 
         for row in rows:
-            result.append({
-                "name": row[0],
-                "config": json.loads(row[1]),
-                "createdAt": row[2]
-            })
+            result.append(
+                {"name": row[0], "config": json.loads(row[1]), "createdAt": row[2]}
+            )
 
         return result
 
@@ -103,10 +105,7 @@ class Database:
         """Delete a row by recipe name"""
         cursor = self._connection.cursor()
 
-        cursor.execute(
-            "DELETE FROM recipe WHERE name = ?",
-            (recipe,)
-        )
+        cursor.execute("DELETE FROM recipe WHERE name = ?", (recipe,))
 
         cursor.close()
         self._connection.commit()
@@ -115,7 +114,11 @@ class Database:
         """Get a row by recipe name"""
         cursor = self._connection.cursor()
 
-        rows = cursor.execute("SELECT name, config, createdAt FROM recipe WHERE name = '{}'".format(recipe)).fetchall()
+        rows = cursor.execute(
+            "SELECT name, config, createdAt FROM recipe WHERE name = '{}'".format(
+                recipe
+            )
+        ).fetchall()
 
         cursor.close()
 
@@ -130,10 +133,11 @@ class Database:
         """Insert a new row"""
         cursor = self._connection.cursor()
 
-        result = cursor.execute("INSERT INTO recipe VALUES ('{}', '{}', datetime('now'))".format(
-            recipe,
-            json.dumps(configs)
-        ))
+        result = cursor.execute(
+            "INSERT INTO recipe VALUES ('{}', '{}', datetime('now'))".format(
+                recipe, json.dumps(configs)
+            )
+        )
 
         cursor.close()
         self._connection.commit()
@@ -148,10 +152,8 @@ class Database:
         cursor.close()
 
         for row in rows:
-            result.append({
-                "name": row[0],
-                "config": json.loads(row[1]),
-                "createdAt": row[2]
-            })
+            result.append(
+                {"name": row[0], "config": json.loads(row[1]), "createdAt": row[2]}
+            )
 
         return result
