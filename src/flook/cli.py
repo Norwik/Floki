@@ -133,6 +133,13 @@ def get(name, output):
     return Hosts().init().get(name, output)
 
 
+# SSH to a host sub command
+@host.command(help="SSH to a host")
+@click.argument("name")
+def ssh(name):
+    return Hosts().init().ssh(name)
+
+
 # Delete host sub command
 @host.command(help="Delete a host")
 @click.argument("name")
@@ -163,9 +170,7 @@ def add(name, path, tags, force):
     return (
         Recipes()
         .init()
-        .add(
-            name, {"path": path, "tags": tags.split(",") if tags != "" else []}, force
-        )
+        .add(name, {"path": path, "tags": tags.split(",") if tags != "" else []}, force)
     )
 
 

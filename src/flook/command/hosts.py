@@ -21,12 +21,14 @@
 # SOFTWARE.
 
 import click
+import subprocess
 
 from flook.model.host import Host
 from flook.module.logger import Logger
 from flook.module.database import Database
 from flook.module.output import Output
 from flook.module.config import Config
+from flook.module.file_system import FileSystem
 
 
 class Hosts:
@@ -36,6 +38,7 @@ class Hosts:
         self.output = Output()
         self.database = Database()
         self.config = Config()
+        self.file_system = FileSystem()
         self.logger = Logger().get_logger(__name__)
 
     def init(self):
@@ -111,6 +114,34 @@ class Hosts:
                 data, Output.JSON if output.lower() == "json" else Output.DEFAULT
             )
         )
+
+    def ssh(self, name):
+        """SSH to a host"""
+        host = self.database.get_host(name)
+
+        if host is None:
+            raise click.ClickException(f"Host with name {name} not found")
+
+        if host.ssh_private_key == "":
+            raise click.ClickException(
+                f"SSH feature is only for hosts with private keys"
+            )
+
+        tmp_path = self._configs["cache"]["path"]
+
+        if self.file_system.file_exists(f"{tmp_path}/{host.id}.pem"):
+            self.file_system.delete_file(f"{tmp_path}/{host.id}.pem")
+
+        self.file_system.write_file(
+            f"{tmp_path}/{host.id}.pem",
+            host.ssh_private_key,
+        )
+
+        self.file_system.change_permission(f"{tmp_path}/{host.id}.pem", 0o400)
+
+        cmd = f"ssh -o StrictHostKeyChecking=no -i {tmp_path}/{host.id}.pem -p {host.port} {host.user}@{host.ip}"
+
+        subprocess.run(cmd.split(" "))
 
     def delete(self, name):
         """Delete a host"""
