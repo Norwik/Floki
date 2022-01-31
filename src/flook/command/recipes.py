@@ -21,20 +21,23 @@
 # SOFTWARE.
 
 import click
+import yaml
 
-from floki.module.logger import Logger
-from floki.module.database import Database
-from floki.module.output import Output
-from floki.module.config import Config
+from flook.module.logger import Logger
+from flook.module.database import Database
+from flook.module.output import Output
+from flook.module.config import Config
+from flook.module.file_system import FileSystem
 
 
-class Hosts:
-    """Hosts Class"""
+class Recipes:
+    """Recipes Class"""
 
     def __init__(self):
         self.output = Output()
         self.database = Database()
         self.config = Config()
+        self.file_system = FileSystem()
         self.logger = Logger().get_logger(__name__)
 
     def init(self):
@@ -45,19 +48,44 @@ class Hosts:
         return self
 
     def add(self, name, configs):
-        """Add a new host"""
-        configs["ssh_private_key_file"] = configs["ssh_private_key_file"].read()
+        """Add a Recipe"""
+        recipe = ""
+        templates = []
 
-        if self.database.get_host(name) is not None:
-            raise click.ClickException(f"Host with name {name} exists")
+        if self.database.get_recipe(name) is not None:
+            raise click.ClickException(f"Recipe with name {name} exists")
 
-        self.database.insert_host(name, configs)
-        click.echo(f"Host with name {name} got created")
+        if self.file_system.file_exists("{}/recipe.yml".format(configs["path"])):
+            recipe = self.file_system.read_file("{}/recipe.yml".format(configs["path"]))
+
+        if self.file_system.file_exists("{}/recipe.yaml".format(configs["path"])):
+            recipe = self.file_system.read_file(
+                "{}/recipe.yaml".format(configs["path"])
+            )
+
+        data = yaml.load(recipe, Loader=yaml.Loader)
+
+        if "templates" in data.keys():
+            for k, v in data["templates"].items():
+                if self.file_system.file_exists("{}/{}".format(configs["path"], v)):
+                    templates.append(
+                        {
+                            k: self.file_system.read_file(
+                                "{}/{}".format(configs["path"], v)
+                            )
+                        }
+                    )
+
+        self.database.insert_recipe(
+            name, {"recipe": recipe, "templates": templates, "tags": configs["tags"]}
+        )
+
+        click.echo(f"Recipe with name {name} got created")
 
     def list(self, tag, output):
-        """List hosts"""
+        """List Recipes"""
         data = []
-        result = self.database.list_hosts()
+        result = self.database.list_recipes()
 
         for item in result:
             if tag != "" and tag not in item["config"]["tags"]:
@@ -66,8 +94,6 @@ class Hosts:
             data.append(
                 {
                     "Name": item["name"],
-                    "Host": item["config"]["host"],
-                    "Connection": item["config"]["connection"].upper(),
                     "Tags": ", ".join(item["config"]["tags"])
                     if len(item["config"]["tags"]) > 0
                     else "-",
@@ -76,7 +102,7 @@ class Hosts:
             )
 
         if len(data) == 0:
-            raise click.ClickException(f"No hosts found!")
+            raise click.ClickException(f"No recipes found!")
 
         print(
             self.output.render(
@@ -85,17 +111,15 @@ class Hosts:
         )
 
     def get(self, name, output):
-        """Get a host"""
-        result = self.database.get_host(name)
+        """Get Recipe"""
+        result = self.database.get_recipe(name)
 
         if result is None:
-            raise click.ClickException(f"Host with name {name} not found")
+            raise click.ClickException(f"Recipe with name {name} not found")
 
         data = [
             {
                 "Name": name,
-                "Host": result["host"],
-                "Connection": result["connection"].upper(),
                 "Tags": ", ".join(result["tags"]) if len(result["tags"]) > 0 else "-",
                 "Created at": result["createdAt"],
             }
@@ -108,6 +132,6 @@ class Hosts:
         )
 
     def delete(self, name):
-        """Delete a host"""
-        self.database.delete_host(name)
-        click.echo(f"Host with name {name} got deleted")
+        """Delete a Recipe"""
+        self.database.delete_recipe(name)
+        click.echo(f"Recipe with name {name} got deleted")

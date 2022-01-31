@@ -16,7 +16,7 @@ tasks:
     assert:
       that:
         - version is defined
-    tags: [ common, floki ]
+    tags: [ common, flook ]
 
   - name: set motd banner
     template:
@@ -24,10 +24,10 @@ tasks:
       dest: "/etc/motd"
       mode: 0700
     notify: restart nginx
-    tags: [ common, floki ]
+    tags: [ common, flook ]
 
   - name: install nginx
     apt:
       name: nginx
       state: latest
-    tags: [ common, floki ]
+    tags: [ common, flook ]

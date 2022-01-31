@@ -5,7 +5,7 @@ TOX ?= tox
 
 help: Makefile
 	@echo
-	@echo " Choose a command run in Floki:"
+	@echo " Choose a command run in Flook:"
 	@echo
 	@sed -n 's/^##//p' $< | column -t -s ':' |  sed -e 's/^/ /'
 	@echo
@@ -48,7 +48,7 @@ version:
 
 ## release: Release to PyPi
 release:
-	$(PYTHON) -m twine upload --repository-url https://upload.pypi.org/legacy/ dist/*
+	$(PYTHON) -m twine upload --repository-url https://upload.pypi.org/legacy/ dist/* --verbose
 
 
 ## install: Install the package locally

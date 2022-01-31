@@ -22,7 +22,7 @@
 
 import logging
 import pytest
-from floki.module.logger import Logger
+from flook.module.logger import Logger
 
 
 def test_logger():

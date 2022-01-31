@@ -22,8 +22,8 @@
 
 import ansible_runner
 
-from floki.module.logger import Logger
-from floki.module.file_system import FileSystem
+from flook.module.logger import Logger
+from flook.module.file_system import FileSystem
 
 
 class Ansible:

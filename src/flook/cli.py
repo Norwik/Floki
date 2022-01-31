@@ -22,11 +22,11 @@
 
 import click
 import logging, json, sys
-from floki import __version__
-from floki.command.configs import Configs
-from floki.command.hosts import Hosts
-from floki.command.recipes import Recipes
-from floki.module.table import Table
+from flook import __version__
+from flook.command.configs import Configs
+from flook.command.hosts import Hosts
+from flook.command.recipes import Recipes
+from flook.module.table import Table
 
 
 @click.group(help="🐺 A Lightweight and Flexible Ansible Command Line Tool")

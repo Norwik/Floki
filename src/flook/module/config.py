@@ -27,7 +27,7 @@ import yaml
 class Config:
     """Config Class"""
 
-    FILE = ".floki.yml"
+    FILE = ".flook.yml"
 
     def __init__(self):
         self.configs = {}

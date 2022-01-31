@@ -21,13 +21,13 @@
 # SOFTWARE.
 
 import pytest
-from floki.module.database import Database
+from flook.module.database import Database
 
 
 def test_database():
     """Database Tests"""
     db = Database()
-    assert db.connect("cache/floki.db") == 0
+    assert db.connect("cache/flook.db") == 0
 
     db.migrate()
     db.delete_host("c.com")

@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 import pytest
-from floki.module.output import Output
+from flook.module.output import Output
 
 
 def test_output():
