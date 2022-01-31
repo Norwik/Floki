@@ -4,6 +4,7 @@
 .. image:: https://github.com/norwik/flook/actions/workflows/ci.yml/badge.svg
     :alt: Build Status
     :target: https://github.com/norwik/flook/actions/workflows/ci.yml
+
 |
 
 ======
