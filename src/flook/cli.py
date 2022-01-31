@@ -163,7 +163,9 @@ def add(name, path, tags, force):
     return (
         Recipes()
         .init()
-        .add(name, {"path": path, "tags": tags.split(",") if "," in tags else []}, force)
+        .add(
+            name, {"path": path, "tags": tags.split(",") if "," in tags else []}, force
+        )
     )
 
 

@@ -48,7 +48,7 @@ class Hosts:
     def add(self, host, force):
         """Add a new host"""
         if force:
-            self.database.delete_host(name)
+            self.database.delete_host(host.name)
 
         if self.database.get_host(host.name) is not None:
             raise click.ClickException(f"Host with name {host.name} exists")
