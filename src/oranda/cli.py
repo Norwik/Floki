@@ -23,6 +23,9 @@
 import click
 import logging, json, sys
 from oranda import __version__
+from oranda.command.hosts import Hosts
+from oranda.command.recipes import Recipes
+from oranda.module.table import Table
 
 @click.group(help="🐺 A Lightweight and Flexible Ansible Command Line Tool")
 @click.version_option(version=__version__, help="Show the current version")
@@ -37,10 +40,8 @@ def host():
 @click.option("-t", "--tag", "tag", type=click.STRING, default="", help="Host tags")
 @click.option("-o", "--output", "output", type=click.STRING, default="", help="Output format")
 def list(tag, output):
-    if tag:
-        click.echo(f'List hosts with tag {tag}')
-    else:
-        click.echo('List all hosts')
+    Table().draw(["Host", "IP"], [["clivern.com", "127.0.0.1"]])
+    Hosts().list(tag, output)
 
 @host.command(help='Add a host')
 @click.argument('name')
@@ -53,17 +54,26 @@ def list(tag, output):
 @click.option("-t", "--tag", "tag", type=click.STRING, default="", help="Host tags")
 @click.option("-o", "--output", "output", type=click.STRING, default="", help="Output format")
 def add(name, connection, host, port, user, password, ssh_private_key_file, tag, output):
-    click.echo(f'Add host {name}')
+    Hosts().add(name, {
+        "connection": connection,
+        "host": host,
+        "port": port,
+        "user": user,
+        "password": password,
+        "ssh_private_key_file": ssh_private_key_file,
+        "tag": tag,
+        "output": output
+    })
 
 @host.command(help='Get a host')
 @click.argument('name')
 @click.option("-o", "--output", "output", type=click.STRING, default="", help="Output format")
 def get(name, output):
-    click.echo(f'Get host {name}')
+    Hosts().get(name, output)
 
 @host.command(help='Delete a host')
 def delete(name):
-    click.echo(f'Delete host {name}')
+    Hosts().delete(name)
 
 
 @click.group(help='Manage recipes')
@@ -74,25 +84,25 @@ def recipe():
 @click.argument('name')
 @click.option("-p", "--path", "path", type=click.Path(exists=True), default="", help="Path to the recipe")
 def add(name, path):
-    click.echo(f'Add recipe {name}')
+    Recipes().add(name, {
+        "path": path
+    })
 
 @recipe.command(help='List all recipes')
 @click.option("-t", "--tag", "tag", type=click.STRING, default="", help="Recipe tags")
-def list(tag):
-    if tag:
-        click.echo(f'List recipes with tag {tag}')
-    else:
-        click.echo('List all recipes')
+@click.option("-o", "--output", "output", type=click.STRING, default="", help="Output format")
+def list(tag, output):
+    Recipes().list(tag, output)
 
 @recipe.command(help='Get a recipe')
 @click.argument('name')
 @click.option("-o", "--output", "output", type=click.STRING, default="", help="Output format")
 def get(name, output):
-    click.echo(f'Get recipe {name}')
+    Recipes().get(name, output)
 
 @recipe.command(help='Delete a recipe')
 def delete(name):
-    click.echo(f'Delete recipe {name}')
+    Recipes().delete(name)
 
 main.add_command(host)
 main.add_command(recipe)

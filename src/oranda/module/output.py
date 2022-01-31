@@ -20,19 +20,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import pytest
-from oranda.module.database import Database
+from prettytable import PrettyTable
 
 
-def test_database():
-    """Database Tests"""
-    db = Database("cache/oranda.db")
-    assert db.connect() == 0
+class Output:
+    """Output Class"""
 
-    db.migrate()
-    db.delete_host("c.com")
+    def table(self, headers, data):
+        """Draw a table"""
 
-    assert db.insert_host("c.com", {"ip": "127.0.0.1"}) == 1
-    assert db.get_host("c.com") == {"ip": "127.0.0.1"}
-    assert db.get_host("f.com") == None
-    assert len(db.list_hosts()) == 1
+        x = PrettyTable()
+        x.field_names = headers
+        x.add_rows(data)
+
+        print(x)
+
+    def json(self):
+        pass

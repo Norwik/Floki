@@ -20,19 +20,28 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import pytest
+import click
+
+from oranda.module.logger import Logger
 from oranda.module.database import Database
 
 
-def test_database():
-    """Database Tests"""
-    db = Database("cache/oranda.db")
-    assert db.connect() == 0
+class Recipes:
+    """Recipes Class"""
 
-    db.migrate()
-    db.delete_host("c.com")
+    def __init__(self):
+        self.database = Database()
+        self.logger = Logger().get_logger(__name__)
 
-    assert db.insert_host("c.com", {"ip": "127.0.0.1"}) == 1
-    assert db.get_host("c.com") == {"ip": "127.0.0.1"}
-    assert db.get_host("f.com") == None
-    assert len(db.list_hosts()) == 1
+    def add(self, name, configs):
+        pass
+
+    def list(self, tag, output):
+        pass
+
+    def get(self, name, output):
+        pass
+
+    def delete(self, name):
+        self.database.delete_recipe(name)
+        click.echo(f'Recipe with name {name} got deleted')

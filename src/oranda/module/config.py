@@ -20,19 +20,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import pytest
-from oranda.module.database import Database
 
+class Config:
+    """Config Class"""
 
-def test_database():
-    """Database Tests"""
-    db = Database("cache/oranda.db")
-    assert db.connect() == 0
-
-    db.migrate()
-    db.delete_host("c.com")
-
-    assert db.insert_host("c.com", {"ip": "127.0.0.1"}) == 1
-    assert db.get_host("c.com") == {"ip": "127.0.0.1"}
-    assert db.get_host("f.com") == None
-    assert len(db.list_hosts()) == 1
+    def __init__(self):
+        pass

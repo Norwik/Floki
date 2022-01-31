@@ -39,12 +39,12 @@ class Database:
         cursor = self._connection.cursor()
 
         cursor.execute("CREATE TABLE IF NOT EXISTS host (name TEXT, config TEXT)")
-        cursor.execute("CREATE TABLE IF NOT EXISTS recipe (name TEXT, content TEXT)")
+        cursor.execute("CREATE TABLE IF NOT EXISTS recipe (name TEXT, config TEXT)")
 
         cursor.close()
         self._connection.commit()
 
-    def delete(self, host):
+    def delete_host(self, host):
         """Delete a row by host name"""
         cursor = self._connection.cursor()
 
@@ -56,7 +56,7 @@ class Database:
         cursor.close()
         self._connection.commit()
 
-    def get(self, host):
+    def get_host(self, host):
         """Get a row by host name"""
         cursor = self._connection.cursor()
 
@@ -69,7 +69,7 @@ class Database:
         else:
             return None
 
-    def insert(self, host, configs={}):
+    def insert_host(self, host, configs={}):
         """Insert a new row"""
         cursor = self._connection.cursor()
 
@@ -82,12 +82,66 @@ class Database:
         self._connection.commit()
         return result.rowcount
 
-    def list(self):
+    def list_hosts(self):
         """List all rows"""
         result = []
 
         cursor = self._connection.cursor()
         rows = cursor.execute("SELECT name, config FROM host").fetchall()
+        cursor.close()
+
+        for row in rows:
+            result.append({
+                "name": row[0],
+                "config": json.loads(row[1])
+            })
+
+        return result
+
+    def delete_recipe(self, recipe):
+        """Delete a row by recipe name"""
+        cursor = self._connection.cursor()
+
+        cursor.execute(
+            "DELETE FROM recipe WHERE name = ?",
+            (recipe,)
+        )
+
+        cursor.close()
+        self._connection.commit()
+
+    def get_recipe(self, recipe):
+        """Get a row by recipe name"""
+        cursor = self._connection.cursor()
+
+        rows = cursor.execute("SELECT name, config FROM recipe WHERE name = '{}'".format(recipe)).fetchall()
+
+        cursor.close()
+
+        if len(rows) > 0:
+            return json.loads(rows[0][1])
+        else:
+            return None
+
+    def insert_recipe(self, recipe, configs={}):
+        """Insert a new row"""
+        cursor = self._connection.cursor()
+
+        result = cursor.execute("INSERT INTO recipe VALUES ('{}', '{}')".format(
+            recipe,
+            json.dumps(configs)
+        ))
+
+        cursor.close()
+        self._connection.commit()
+        return result.rowcount
+
+    def list_recipes(self):
+        """List all rows"""
+        result = []
+
+        cursor = self._connection.cursor()
+        rows = cursor.execute("SELECT name, config FROM recipe").fetchall()
         cursor.close()
 
         for row in rows:
