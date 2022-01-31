@@ -43,11 +43,11 @@ class Output:
         x.field_names = headers
         x.add_rows(rows)
 
-        print(x)
+        return x
 
     def _json(self, data):
         """Output data as JSON"""
-        print(json.dumps(data))
+        return json.dumps(data)
 
     def render(self, data, typ):
         """Render Data to the Console"""

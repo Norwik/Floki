@@ -20,7 +20,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import pytest
+from oranda.module.output import Output
 
-class Editor:
-    """Editor Class"""
-    pass
+
+def test_output():
+    """Output Tests"""
+    data = {"name": "Alice", "age": 25}
+    expected_output = '{"name": "Alice", "age": 25}'
+
+    output = Output()._json(data)
+    assert output == expected_output
+
+    data = [{"name": "Alice", "age": 25}, {"name": "Bob", "age": 30}]
+    output = Output()._table(data)
+
+    assert str(output) != ""

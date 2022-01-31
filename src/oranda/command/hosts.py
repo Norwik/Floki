@@ -67,7 +67,7 @@ class Hosts:
                 "Tags": ", ".join(item["config"]["tag"]) if len(item["config"]["tag"]) > 0 else "-"
             })
 
-        self.output.render(data, Output.JSON if output.lower() == "json" else Output.DEFAULT)
+        print(self.output.render(data, Output.JSON if output.lower() == "json" else Output.DEFAULT))
 
     def get(self, name, output):
         """Get a host"""
@@ -83,7 +83,7 @@ class Hosts:
             "Tags": ", ".join(result["tag"]) if len(result["tag"]) > 0 else "-"
         }]
 
-        self.output.render(data, Output.JSON if output.lower() == "json" else Output.DEFAULT)
+        print(self.output.render(data, Output.JSON if output.lower() == "json" else Output.DEFAULT))
 
     def delete(self, name):
         """Delete a host"""
