@@ -2,6 +2,12 @@
 Changelog
 =========
 
+Version 0.2.3
+=============
+
+- Support localhost
+
+
 Version 0.2.0
 =============
 

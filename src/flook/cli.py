@@ -99,8 +99,8 @@ def list(tag, output):
     "-s",
     "--ssh_private_key_file",
     "ssh_private_key_file",
+    required=False,
     type=click.File(),
-    default="",
     help="Private key file used by ssh",
 )
 @click.option("-t", "--tags", "tags", type=click.STRING, default="", help="Host tags")
@@ -113,7 +113,7 @@ def add(name, connection, ip, port, user, password, ssh_private_key_file, tags):
         port,
         user,
         password,
-        ssh_private_key_file.read(),
+        ssh_private_key_file.read() if ssh_private_key_file is not None else "",
         tags.split(",") if "," in tags else [],
         None,
         None,

@@ -45,7 +45,14 @@ class Playbook:
         hosts = "[remote]\n"
 
         for host in self._hosts:
-            if host.password != "":
+
+            if host.connection == "local":
+                hosts = (
+                    hosts
+                    + f"{host.ip} ansible_connection={host.connection} ansible_python_interpreter=python3"
+                )
+
+            elif host.password != "":
                 hosts = (
                     hosts
                     + f"{host.ip} ansible_port={host.port} ansible_connection={host.connection} ansible_user={host.user} ansible_password={host.password} ansible_python_interpreter=python3"
@@ -80,7 +87,6 @@ class Playbook:
 
         base = {
             "hosts": "remote",
-            "become": "yes",
         }
 
         base.update(data)
