@@ -20,6 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import json
 from prettytable import PrettyTable
 
 
@@ -35,8 +36,8 @@ class Output:
         rows = []
 
         for item in data:
-            headers = data.keys()
-            rows.append(data.values())
+            headers = item.keys()
+            rows.append(item.values())
 
         x = PrettyTable()
         x.field_names = headers
@@ -46,7 +47,7 @@ class Output:
 
     def _json(self, data):
         """Output data as JSON"""
-        print(data)
+        print(json.dumps(data))
 
     def render(self, data, typ):
         """Render Data to the Console"""

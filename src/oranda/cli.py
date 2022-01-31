@@ -41,8 +41,7 @@ def host():
 @click.option("-t", "--tag", "tag", type=click.STRING, default="", help="Host tags")
 @click.option("-o", "--output", "output", type=click.STRING, default="", help="Output format")
 def list(tag, output):
-    Table().draw(["Host", "IP"], [["clivern.com", "127.0.0.1"]])
-    Hosts().list(tag, output)
+    return Hosts().init().list(tag, output)
 
 @host.command(help='Add a host')
 @click.argument('name')
@@ -53,28 +52,26 @@ def list(tag, output):
 @click.option("-pa", "--password", "password", type=click.STRING, default="", help="The password to use to authenticate to the host")
 @click.option("-s", "--ssh_private_key_file", "ssh_private_key_file", type=click.File(), default="", help="Private key file used by ssh")
 @click.option("-t", "--tag", "tag", type=click.STRING, default="", help="Host tags")
-@click.option("-o", "--output", "output", type=click.STRING, default="", help="Output format")
-def add(name, connection, host, port, user, password, ssh_private_key_file, tag, output):
-    Hosts().add(name, {
+def add(name, connection, host, port, user, password, ssh_private_key_file, tag):
+    return Hosts().init().add(name, {
         "connection": connection,
         "host": host,
         "port": port,
         "user": user,
         "password": password,
         "ssh_private_key_file": ssh_private_key_file,
-        "tag": tag,
-        "output": output
+        "tag": tag.split(",") if "," in tag else tag
     })
 
 @host.command(help='Get a host')
 @click.argument('name')
 @click.option("-o", "--output", "output", type=click.STRING, default="", help="Output format")
 def get(name, output):
-    Hosts().get(name, output)
+    return Hosts().init().get(name, output)
 
 @host.command(help='Delete a host')
 def delete(name):
-    Hosts().delete(name)
+    return Hosts().init().delete(name)
 
 
 @click.group(help='Manage recipes')
@@ -84,26 +81,28 @@ def recipe():
 @recipe.command(help='Add a recipe')
 @click.argument('name')
 @click.option("-p", "--path", "path", type=click.Path(exists=True), default="", help="Path to the recipe")
+@click.option("-t", "--tag", "tag", type=click.STRING, default="", help="Recipe tags")
 def add(name, path):
-    Recipes().add(name, {
-        "path": path
+    return Recipes().init().add(name, {
+        "path": path,
+        "tag": tag.split(",") if "," in tag else tag
     })
 
 @recipe.command(help='List all recipes')
 @click.option("-t", "--tag", "tag", type=click.STRING, default="", help="Recipe tags")
 @click.option("-o", "--output", "output", type=click.STRING, default="", help="Output format")
 def list(tag, output):
-    Recipes().list(tag, output)
+    return Recipes().init().list(tag, output)
 
 @recipe.command(help='Get a recipe')
 @click.argument('name')
 @click.option("-o", "--output", "output", type=click.STRING, default="", help="Output format")
 def get(name, output):
-    Recipes().get(name, output)
+    return Recipes().init().get(name, output)
 
 @recipe.command(help='Delete a recipe')
 def delete(name):
-    Recipes().delete(name)
+    return Recipes().init().delete(name)
 
 @click.group(help='Manage configs')
 def config():
@@ -111,15 +110,15 @@ def config():
 
 @config.command(help='Init configurations')
 def init():
-    Configs().init()
+    return Configs().init()
 
 @config.command(help='Edit configurations')
 def edit():
-    Configs().edit()
+    return Configs().edit()
 
 @config.command(help='Show configurations')
 def dump():
-    Configs().dump()
+    return Configs().dump()
 
 main.add_command(host)
 main.add_command(recipe)

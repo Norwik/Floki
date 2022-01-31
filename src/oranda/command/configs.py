@@ -36,8 +36,8 @@ class Configs:
     FILE = ".oranda.yml"
 
     def __init__(self):
+        self.database = Database()
         self.file_system = FileSystem()
-        self.db = Database()
         self._home = os.getenv("HOME", "")
         self.logger = Logger().get_logger(__name__)
 
@@ -53,10 +53,11 @@ class Configs:
             }
         }
 
-        self.db.connect("{}/oranda.db".format(self._home))
-        self.db.migrate()
+        self.database.connect("{}/oranda.db".format(self._home))
+        self.database.migrate()
 
         self.file_system.write_file("{}/{}".format(self._home, Configs.FILE), yaml.dump(base))
+
         click.echo("Config file {} got created!".format(
             click.format_filename("{}/{}".format(self._home, Configs.FILE))
         ))
@@ -70,6 +71,7 @@ class Configs:
             raise click.ClickException('Config file is missing')
 
         click.edit(filename="{}/{}".format(self._home, Configs.FILE))
+
         click.echo("Config file {} got updated!".format(
             click.format_filename("{}/{}".format(self._home, Configs.FILE))
         ))

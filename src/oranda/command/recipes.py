@@ -25,24 +25,33 @@ import click
 from oranda.module.logger import Logger
 from oranda.module.database import Database
 from oranda.module.output import Output
+from oranda.module.config import Config
 
 
 class Recipes:
     """Recipes Class"""
 
     def __init__(self):
-        self.database = Database()
         self.output = Output()
+        self.database = Database()
+        self.config = Config()
         self.logger = Logger().get_logger(__name__)
 
+    def init(self):
+        """Init database and configs"""
+        self._configs = self.config.load()
+        self.database.connect(self._configs["database"]["path"])
+        self.database.migrate()
+        return self
+
     def add(self, name, configs):
-        pass
+        self.database.insert_recipe(name, configs)
 
     def list(self, tag, output):
-        pass
+        result = self.database.list_recipes()
 
     def get(self, name, output):
-        pass
+        result = self.database.get_recipe(name)
 
     def delete(self, name):
         self.database.delete_recipe(name)

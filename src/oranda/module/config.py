@@ -20,9 +20,26 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import os
+import yaml
+
 
 class Config:
     """Config Class"""
 
+    FILE = ".oranda.yml"
+
     def __init__(self):
-        pass
+        self.configs = {}
+        self._home = os.getenv("HOME", "")
+
+    def load(self):
+        """Load Configs"""
+        with open("{}/{}".format(self._home, Config.FILE)) as f:
+            self.configs = yaml.load(f, Loader=yaml.FullLoader)
+
+        return self.configs
+
+    def get_configs(self):
+        """Get Configs"""
+        return self.configs

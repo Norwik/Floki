@@ -25,24 +25,67 @@ import click
 from oranda.module.logger import Logger
 from oranda.module.database import Database
 from oranda.module.output import Output
+from oranda.module.config import Config
 
 
 class Hosts:
     """Hosts Class"""
 
     def __init__(self):
+        self.output = Output()
         self.database = Database()
+        self.config = Config()
         self.logger = Logger().get_logger(__name__)
 
+    def init(self):
+        """Init database and configs"""
+        self._configs = self.config.load()
+        self.database.connect(self._configs["database"]["path"])
+        self.database.migrate()
+        return self
+
     def add(self, name, configs):
-        pass
+        """Add a new host"""
+        configs['ssh_private_key_file'] = configs["ssh_private_key_file"].read()
+
+        if self.database.get_host(name) is not None:
+            raise click.ClickException(f'Host with name {name} exists')
+
+        self.database.insert_host(name, configs)
+        click.echo(f'Host with name {name} got created')
 
     def list(self, tag, output):
-        pass
+        """List hosts"""
+        data = []
+        result = self.database.list_hosts()
+
+        for item in result:
+            data.append({
+                "Name": item["name"],
+                "Host": item["config"]["host"],
+                "Connection": item["config"]["connection"].upper(),
+                "Tags": ", ".join(item["config"]["tag"]) if len(item["config"]["tag"]) > 0 else "-"
+            })
+
+        self.output.render(data, Output.JSON if output.lower() == "json" else Output.DEFAULT)
 
     def get(self, name, output):
-        pass
+        """Get a host"""
+        result = self.database.get_host(name)
+
+        if result is None:
+            raise click.ClickException(f'Host with name {name} not found')
+
+        data = [{
+            "Name": name,
+            "Host": result["host"],
+            "Connection": result["connection"].upper(),
+            "Tags": ", ".join(result["tag"]) if len(result["tag"]) > 0 else "-"
+        }]
+
+        self.output.render(data, Output.JSON if output.lower() == "json" else Output.DEFAULT)
 
     def delete(self, name):
+        """Delete a host"""
         self.database.delete_host(name)
         click.echo(f'Host with name {name} got deleted')
