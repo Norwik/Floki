@@ -1,18 +1,20 @@
-.. image:: https://img.shields.io/pypi/v/oranda.svg
+.. image:: https://img.shields.io/pypi/v/floki.svg
     :alt: PyPI-Server
-    :target: https://pypi.org/project/oranda/
-.. image:: https://github.com/norwik/oranda/actions/workflows/ci.yml/badge.svg
+    :target: https://pypi.org/project/floki/
+.. image:: https://github.com/norwik/floki/actions/workflows/ci.yml/badge.svg
     :alt: Build Status
-    :target: https://github.com/norwik/oranda/actions/workflows/ci.yml
+    :target: https://github.com/norwik/floki/actions/workflows/ci.yml
 |
 
 ======
-Oranda
+Floki
 ======
 
-A Lightweight and Flexible Ansible Command Line Tool. To use oranda, follow the following steps:
+A Lightweight and Flexible Ansible Command Line Tool.
 
-1. Create a python virtual environment.
+To use floki, follow the following steps:
+
+1. Create a python virtual environment or use system wide environment
 
 .. code-block::
 
@@ -20,15 +22,22 @@ A Lightweight and Flexible Ansible Command Line Tool. To use oranda, follow the 
     $ source venv/bin/activate
 
 
-2. Install oranda package with pip.
+2. Install floki package with pip.
 
 .. code-block::
 
-    $ pip install oranda
+    $ pip install floki
 
 
-3. Get oranda command line help
+3. Get floki command line help
 
 .. code-block::
 
-    $ oranda --help
+    $ floki --help
+
+
+4. Init the config file and the database
+
+.. code-block::
+
+    $ floki config init

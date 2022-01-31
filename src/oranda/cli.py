@@ -22,11 +22,11 @@
 
 import click
 import logging, json, sys
-from oranda import __version__
-from oranda.command.configs import Configs
-from oranda.command.hosts import Hosts
-from oranda.command.recipes import Recipes
-from oranda.module.table import Table
+from floki import __version__
+from floki.command.configs import Configs
+from floki.command.hosts import Hosts
+from floki.command.recipes import Recipes
+from floki.module.table import Table
 
 
 @click.group(help="🐺 A Lightweight and Flexible Ansible Command Line Tool")

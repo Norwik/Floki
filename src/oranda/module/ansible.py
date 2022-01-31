@@ -22,8 +22,8 @@
 
 import ansible_runner
 
-from oranda.module.logger import Logger
-from oranda.module.file_system import FileSystem
+from floki.module.logger import Logger
+from floki.module.file_system import FileSystem
 
 
 class Ansible:

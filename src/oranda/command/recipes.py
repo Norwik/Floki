@@ -23,11 +23,11 @@
 import click
 import yaml
 
-from oranda.module.logger import Logger
-from oranda.module.database import Database
-from oranda.module.output import Output
-from oranda.module.config import Config
-from oranda.module.file_system import FileSystem
+from floki.module.logger import Logger
+from floki.module.database import Database
+from floki.module.output import Output
+from floki.module.config import Config
+from floki.module.file_system import FileSystem
 
 
 class Recipes:

@@ -24,16 +24,16 @@ import os
 import yaml
 import click
 
-from oranda.module.database import Database
-from oranda.module.logger import Logger
-from oranda.module.output import Output
-from oranda.module.file_system import FileSystem
+from floki.module.database import Database
+from floki.module.logger import Logger
+from floki.module.output import Output
+from floki.module.file_system import FileSystem
 
 
 class Configs:
     """Configs Class"""
 
-    FILE = ".oranda.yml"
+    FILE = ".floki.yml"
 
     def __init__(self):
         self.database = Database()
@@ -46,9 +46,9 @@ class Configs:
         if self._home == "":
             raise click.ClickException("User home path is not defined")
 
-        base = {"database": {"type": "file", "path": "{}/oranda.db".format(self._home)}}
+        base = {"database": {"type": "file", "path": "{}/floki.db".format(self._home)}}
 
-        self.database.connect("{}/oranda.db".format(self._home))
+        self.database.connect("{}/floki.db".format(self._home))
         self.database.migrate()
 
         self.file_system.write_file(

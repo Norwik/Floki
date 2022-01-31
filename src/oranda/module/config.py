@@ -27,7 +27,7 @@ import yaml
 class Config:
     """Config Class"""
 
-    FILE = ".oranda.yml"
+    FILE = ".floki.yml"
 
     def __init__(self):
         self.configs = {}

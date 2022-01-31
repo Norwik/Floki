@@ -21,13 +21,13 @@
 # SOFTWARE.
 
 import pytest
-from oranda.module.database import Database
+from floki.module.database import Database
 
 
 def test_database():
     """Database Tests"""
     db = Database()
-    assert db.connect("cache/oranda.db") == 0
+    assert db.connect("cache/floki.db") == 0
 
     db.migrate()
     db.delete_host("c.com")

@@ -22,7 +22,7 @@
 
 import logging
 import pytest
-from oranda.module.logger import Logger
+from floki.module.logger import Logger
 
 
 def test_logger():

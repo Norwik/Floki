@@ -20,7 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
+# @TODO this class should create a dir & create all the required
+# files for ansible to run against the host.
 class Playbook:
     """Playbook Class"""
 

@@ -5,7 +5,7 @@ TOX ?= tox
 
 help: Makefile
 	@echo
-	@echo " Choose a command run in Oranda:"
+	@echo " Choose a command run in Floki:"
 	@echo
 	@sed -n 's/^##//p' $< | column -t -s ':' |  sed -e 's/^/ /'
 	@echo

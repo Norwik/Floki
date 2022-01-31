@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 import pytest
-from oranda.module.output import Output
+from floki.module.output import Output
 
 
 def test_output():
