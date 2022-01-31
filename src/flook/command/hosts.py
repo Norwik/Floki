@@ -25,9 +25,9 @@ import subprocess
 
 from flook.model.host import Host
 from flook.module.logger import Logger
-from flook.module.database import Database
 from flook.module.output import Output
 from flook.module.config import Config
+from flook.module.database import Database
 from flook.module.file_system import FileSystem
 
 

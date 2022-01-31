@@ -23,11 +23,12 @@
 import uuid
 import click
 import logging, json, sys
+
 from flook import __version__
-from flook.command.configs import Configs
-from flook.command.hosts import Hosts
-from flook.command.recipes import Recipes
 from flook.model.host import Host
+from flook.command.hosts import Hosts
+from flook.command.configs import Configs
+from flook.command.recipes import Recipes
 
 
 @click.group(help="🐺 A Lightweight and Flexible Ansible Command Line Tool")

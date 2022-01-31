@@ -24,9 +24,9 @@ import os
 import yaml
 import click
 
-from flook.module.database import Database
 from flook.module.logger import Logger
 from flook.module.output import Output
+from flook.module.database import Database
 from flook.module.file_system import FileSystem
 
 

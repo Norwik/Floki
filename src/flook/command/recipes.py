@@ -21,16 +21,16 @@
 # SOFTWARE.
 
 import uuid
-import click
 import yaml
+import click
 
 from flook.model.recipe import Recipe
 from flook.module.logger import Logger
-from flook.module.database import Database
 from flook.module.output import Output
 from flook.module.config import Config
-from flook.module.file_system import FileSystem
+from flook.module.database import Database
 from flook.module.playbook import Playbook
+from flook.module.file_system import FileSystem
 
 
 class Recipes:
