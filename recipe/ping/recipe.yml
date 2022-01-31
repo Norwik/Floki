@@ -22,8 +22,7 @@
 
 
 tasks:
-  - name: install nginx
-    apt:
-      name: nginx
-      state: latest
-    tags: [ nginx, flook ]
+  - name: ping the host
+    ping:
+      data: pong
+    tags: [ ping, flook ]

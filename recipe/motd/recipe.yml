@@ -21,9 +21,23 @@
 # SOFTWARE.
 
 
+vars:
+  version: v0.2.1
+
+templates:
+  motd.j2: motd.j2
+
 tasks:
-  - name: install nginx
-    apt:
-      name: nginx
-      state: latest
-    tags: [ nginx, flook ]
+  - name: check mandatory variables
+    assert:
+      that:
+        - version is defined
+    tags: [ motd, flook ]
+
+  - name: set motd banner
+    template:
+      src: "motd.j2"
+      dest: "/etc/motd"
+      mode: 0700
+    notify: restart nginx
+    tags: [ motd, flook ]
