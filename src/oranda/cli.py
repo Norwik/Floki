@@ -20,18 +20,29 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import logging
-import click
+import logging, json, sys, click
 from oranda import __version__
 
+main = click.Group(help="A Lightweight and Flexible Ansible Command Line Tool")
 
-@click.command()
-def hello():
-    click.echo('Hello World!')
+@main.command("key", help="Get key from JSON object")
+@click.option("-i", "--input", "infile", type=click.File(), default=sys.stdin, help="Input file name")
+@click.option("-o", "--output", "outfile", type=click.File("w"), default=sys.stdout, help="Output file name")
+@click.option("-k", "--key", required=True, help="Sorting key")
+def main_get_key(infile, outfile, key):
+    data = json.load(infile)
+    data = data[key]
+    json.dump(data, outfile)
+
+@main.command("list-key", help="Get key from JSON list objects")
+@click.option("-i", "--input", "infile", type=click.File(), default=sys.stdin, help="Input file name")
+@click.option("-o", "--output", "outfile", type=click.File("w"), default=sys.stdout, help="Output file name")
+@click.option("-k", "--key", required=True, help="Sorting key")
+def main_get_list_key(infile, outfile, key):
+    data = json.load(infile)
+    data = [obj[key] for obj in data if key in obj]
+    json.dump(data, outfile)
 
 
-def main():
-    hello()
-
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    exit(main())

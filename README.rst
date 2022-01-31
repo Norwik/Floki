@@ -4,16 +4,13 @@
 .. image:: https://github.com/norwik/oranda/actions/workflows/ci.yml/badge.svg
     :alt: Build Status
     :target: https://github.com/norwik/oranda/actions/workflows/ci.yml
-
 |
 
 ======
 Oranda
 ======
 
-A Lightweight and Flexible Ansible Command Line Tool.
-
-To use oranda, follow the following steps:
+A Lightweight and Flexible Ansible Command Line Tool. To use oranda, follow the following steps:
 
 1. Create a python virtual environment.
 
@@ -28,3 +25,10 @@ To use oranda, follow the following steps:
 .. code-block::
 
     $ pip install oranda
+
+
+3. Get oranda command line help
+
+.. code-block::
+
+    $ oranda --help
