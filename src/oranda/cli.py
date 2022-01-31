@@ -24,7 +24,6 @@ import click
 import logging, json, sys
 from oranda import __version__
 
-
 @click.group(help="🐺 A Lightweight and Flexible Ansible Command Line Tool")
 @click.version_option(version=__version__, help="Show the current version")
 def main():
@@ -38,7 +37,7 @@ def host():
 def get():
     click.echo('Get host')
 
-@host.command(help='List all hosts')
+@host.command(help='List hosts')
 @click.option("-t", "--tag", "tag", type=click.STRING, default="", help="Host tags")
 def list(tag):
     if tag:
@@ -50,16 +49,16 @@ def list(tag):
 def delete():
     click.echo('Delete host')
 
-@click.group(help='Manage playbooks')
-def playbook():
+@click.group(help='Manage recipes')
+def recipe():
     pass
 
-@playbook.command(help='List all playbooks')
+@recipe.command(help='List all recipes')
 def list():
-    click.echo('List playbooks')
+    click.echo('List recipes')
 
 main.add_command(host)
-main.add_command(playbook)
+main.add_command(recipe)
 
 if __name__ == '__main__':
     main()

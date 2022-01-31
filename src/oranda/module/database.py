@@ -39,6 +39,7 @@ class Database:
         cursor = self._connection.cursor()
 
         cursor.execute("CREATE TABLE IF NOT EXISTS host (name TEXT, config TEXT)")
+        cursor.execute("CREATE TABLE IF NOT EXISTS recipe (name TEXT, content TEXT)")
 
         cursor.close()
         self._connection.commit()
