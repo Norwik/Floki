@@ -32,7 +32,6 @@ from flook.module.output import Output
 from flook.module.config import Config
 from flook.module.file_system import FileSystem
 from flook.module.playbook import Playbook
-from flook.module.ansible import Ansible
 
 
 class Recipes:
