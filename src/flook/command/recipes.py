@@ -143,9 +143,33 @@ class Recipes:
 
         click.echo(f"Recipe with name {name} got deleted")
 
-    def run(self, name, host, tag):
+    def run(self, name, host_name, tag):
         """Run a Recipe towards a host"""
-        # name is a recipe name
-        # host is the host name
-        # tag is the tag for hosts
-        pass
+        hosts = []
+        found = ""
+        recipe = self.database.get_recipe(name)
+
+        if recipe is None:
+            raise click.ClickException(f"Recipe with name {recipe.name} not found")
+
+        if host_name != "":
+            host = self.database.get_host(host_name)
+
+            if host is None:
+                raise click.ClickException(f"Host with name {name} not found")
+
+            found = host.id
+            hosts.append(host)
+
+        if tag != "":
+            items = self.database.list_hosts()
+            for item in items:
+                if tag not in item.tags or found == item.id:
+                    continue
+                hosts.append(item)
+
+        if len(hosts) == 0:
+            raise click.ClickException(f"No hosts matching!")
+
+        print(hosts)
+        print(recipe)

@@ -66,4 +66,4 @@ class Output:
         """Change string into camel case"""
         value = sub(r"(_|-)+", " ", value).title().replace(" ", "")
 
-        return ''.join([value[0].lower(), value[1:]])
+        return "".join([value[0].lower(), value[1:]])
