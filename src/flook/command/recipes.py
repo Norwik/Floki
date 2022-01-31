@@ -23,7 +23,6 @@
 import uuid
 import click
 import yaml
-from yaspin import yaspin
 
 from flook.model.recipe import Recipe
 from flook.module.logger import Logger
@@ -176,10 +175,10 @@ class Recipes:
         if len(hosts) == 0:
             raise click.ClickException(f"No hosts matching!")
 
-        pb = Playbook(
+        playbook = Playbook(
             str(uuid.uuid4()), self._configs["cache"]["path"].rstrip("/"), hosts, recipe
         )
 
-        pb.build()
-        pb.run()
-        pb.cleanup()
+        playbook.build()
+        playbook.run()
+        playbook.cleanup()
