@@ -115,7 +115,7 @@ def add(name, connection, ip, port, user, password, ssh_private_key_file, tags, 
         user,
         password,
         ssh_private_key_file.read() if ssh_private_key_file is not None else "",
-        tags.split(",") if "," in tags else [],
+        tags.split(",") if tags != "" else [],
         None,
         None,
     )
@@ -164,7 +164,7 @@ def add(name, path, tags, force):
         Recipes()
         .init()
         .add(
-            name, {"path": path, "tags": tags.split(",") if "," in tags else []}, force
+            name, {"path": path, "tags": tags.split(",") if tags != "" else []}, force
         )
     )
 
