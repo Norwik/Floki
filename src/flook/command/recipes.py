@@ -123,7 +123,7 @@ class Recipes:
         recipe = self.database.get_recipe(name)
 
         if recipe is None:
-            raise click.ClickException(f"Recipe with name {recipe.name} not found")
+            raise click.ClickException(f"Recipe with name {name} not found")
 
         data = [
             {
@@ -154,7 +154,7 @@ class Recipes:
         recipe = self.database.get_recipe(name)
 
         if recipe is None:
-            raise click.ClickException(f"Recipe with name {recipe.name} not found")
+            raise click.ClickException(f"Recipe with name {name} not found")
 
         if host_name != "":
             host = self.database.get_host(host_name)
