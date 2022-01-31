@@ -117,14 +117,21 @@ To use flook, follow the following steps:
     $ flook host get <host_name>
 
 
-13. To delete a host
+13. To SSH into a host
+
+.. code-block::
+
+    $ flook host ssh <host_name>
+
+
+14. To delete a host
 
 .. code-block::
 
     $ flook host delete <host_name>
 
 
-14. Run a recipe towards a host
+15. Run a recipe towards a host
 
 .. code-block::
 
