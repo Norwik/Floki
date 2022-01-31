@@ -72,7 +72,7 @@ class Recipes:
 
         data = yaml.load(recipe, Loader=yaml.Loader)
 
-        if "templates" in data.keys():
+        if data and "templates" in data.keys():
             for k, v in data["templates"].items():
                 if self.file_system.file_exists("{}/{}".format(configs["path"], v)):
                     templates.append(
