@@ -2,6 +2,12 @@
 Changelog
 =========
 
+Version 0.3.0
+=============
+
+- Show ansible output on recipe run.
+
+
 Version 0.2.3
 =============
 

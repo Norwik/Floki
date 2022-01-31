@@ -173,16 +173,10 @@ class Recipes:
         if len(hosts) == 0:
             raise click.ClickException(f"No hosts matching!")
 
-        with yaspin(text="Running recipe..", color="cyan") as sp:
-            pb_id = str(uuid.uuid4())
-            pb = Playbook(
-                pb_id, self._configs["cache"]["path"].rstrip("/"), hosts, recipe
-            )
-            pb.build()
-            result = pb.run()
-            pb.cleanup()
+        pb = Playbook(
+            str(uuid.uuid4()), self._configs["cache"]["path"].rstrip("/"), hosts, recipe
+        )
 
-            if result:
-                sp.write("Recipe finished successfully!")
-            else:
-                sp.write("Oops! recipe failed.")
+        pb.build()
+        pb.run()
+        pb.cleanup()

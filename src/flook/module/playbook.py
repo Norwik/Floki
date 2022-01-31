@@ -45,7 +45,6 @@ class Playbook:
         hosts = "[remote]\n"
 
         for host in self._hosts:
-
             if host.connection == "local":
                 hosts = (
                     hosts
@@ -101,7 +100,6 @@ class Playbook:
             private_data_dir="{}/{}/cache".format(self._cache, self._id),
             playbook="{}/{}/playbook.yml".format(self._cache, self._id),
             inventory="{}/{}/hosts".format(self._cache, self._id),
-            quiet=True,
         )
 
         if out.status.lower() == "failed":
