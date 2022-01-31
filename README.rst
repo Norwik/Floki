@@ -56,7 +56,11 @@ To use flook, follow the following steps:
 .. code-block::
 
     $ flook recipe add <recipe_name> -p <recipe_relative_path>
-    $ flook recipe add clivern/nginx -p recipe/nginx
+
+    # Examples
+    $ flook recipe add clivern/ping -p recipe/ping -f
+    $ flook recipe add clivern/nginx -p recipe/nginx -f
+    $ flook recipe add clivern/motd -p recipe/motd -f
 
 
 7. To list recipes
@@ -64,6 +68,9 @@ To use flook, follow the following steps:
 .. code-block::
 
     $ flook recipe list
+
+    # Get recipes as a JSON
+    $ flook recipe list -o json | jq .
 
 
 8. To get a recipe
@@ -85,7 +92,12 @@ To use flook, follow the following steps:
 .. code-block::
 
     $ flook host add <host_name> -i <host_ip> -p <ssh_port> -u <ssh_username> -s <ssh_key_path>
+
+    # Add a remote host
     $ flook host add example.com -i 127.0.0.1 -p 22 -u root -s /Users/root/.ssh/id_rsa.pem
+
+    # Add the localhost
+    $ flook host add localhost -i localhost -c local
 
 
 11. To list hosts
@@ -93,6 +105,9 @@ To use flook, follow the following steps:
 .. code-block::
 
     $ flook host list
+
+    # Get hosts as a JSON
+    $ flook host list -o json | jq .
 
 
 12. To get a host
@@ -114,4 +129,7 @@ To use flook, follow the following steps:
 .. code-block::
 
     $ flook recipe run <recipe_name> -h <host_name>
+
+    # Examples
     $ flook recipe run clivern/nginx -h example.com
+    $ flook recipe run clivern/ping -h localhost
