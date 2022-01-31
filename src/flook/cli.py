@@ -26,7 +26,6 @@ from flook import __version__
 from flook.command.configs import Configs
 from flook.command.hosts import Hosts
 from flook.command.recipes import Recipes
-from flook.module.table import Table
 
 
 @click.group(help="🐺 A Lightweight and Flexible Ansible Command Line Tool")
