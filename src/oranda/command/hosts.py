@@ -60,12 +60,19 @@ class Hosts:
         result = self.database.list_hosts()
 
         for item in result:
+            if tag != "" and tag not in item["config"]["tags"]:
+                continue
+
             data.append({
                 "Name": item["name"],
                 "Host": item["config"]["host"],
                 "Connection": item["config"]["connection"].upper(),
-                "Tags": ", ".join(item["config"]["tag"]) if len(item["config"]["tag"]) > 0 else "-"
+                "Tags": ", ".join(item["config"]["tags"]) if len(item["config"]["tags"]) > 0 else "-",
+                "Created at": item["createdAt"]
             })
+
+        if len(data) == 0:
+            raise click.ClickException(f'No hosts found!')
 
         print(self.output.render(data, Output.JSON if output.lower() == "json" else Output.DEFAULT))
 
@@ -80,7 +87,8 @@ class Hosts:
             "Name": name,
             "Host": result["host"],
             "Connection": result["connection"].upper(),
-            "Tags": ", ".join(result["tag"]) if len(result["tag"]) > 0 else "-"
+            "Tags": ", ".join(result["tags"]) if len(result["tags"]) > 0 else "-",
+            "Created at": result["createdAt"]
         }]
 
         print(self.output.render(data, Output.JSON if output.lower() == "json" else Output.DEFAULT))

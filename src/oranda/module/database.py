@@ -36,8 +36,8 @@ class Database:
     def migrate(self):
         cursor = self._connection.cursor()
 
-        cursor.execute("CREATE TABLE IF NOT EXISTS host (name TEXT, config TEXT)")
-        cursor.execute("CREATE TABLE IF NOT EXISTS recipe (name TEXT, config TEXT)")
+        cursor.execute("CREATE TABLE IF NOT EXISTS host (name TEXT, config TEXT, createdAt TEXT)")
+        cursor.execute("CREATE TABLE IF NOT EXISTS recipe (name TEXT, config TEXT, createdAt TEXT)")
 
         cursor.close()
         self._connection.commit()
@@ -58,12 +58,14 @@ class Database:
         """Get a row by host name"""
         cursor = self._connection.cursor()
 
-        rows = cursor.execute("SELECT name, config FROM host WHERE name = '{}'".format(host)).fetchall()
+        rows = cursor.execute("SELECT name, config, createdAt FROM host WHERE name = '{}'".format(host)).fetchall()
 
         cursor.close()
 
         if len(rows) > 0:
-            return json.loads(rows[0][1])
+            result = json.loads(rows[0][1])
+            result["createdAt"] = rows[0][2]
+            return result
         else:
             return None
 
@@ -71,7 +73,7 @@ class Database:
         """Insert a new row"""
         cursor = self._connection.cursor()
 
-        result = cursor.execute("INSERT INTO host VALUES ('{}', '{}')".format(
+        result = cursor.execute("INSERT INTO host VALUES ('{}', '{}', datetime('now'))".format(
             host,
             json.dumps(configs)
         ))
@@ -85,13 +87,14 @@ class Database:
         result = []
 
         cursor = self._connection.cursor()
-        rows = cursor.execute("SELECT name, config FROM host").fetchall()
+        rows = cursor.execute("SELECT name, config, createdAt FROM host").fetchall()
         cursor.close()
 
         for row in rows:
             result.append({
                 "name": row[0],
-                "config": json.loads(row[1])
+                "config": json.loads(row[1]),
+                "createdAt": row[2]
             })
 
         return result
@@ -112,12 +115,14 @@ class Database:
         """Get a row by recipe name"""
         cursor = self._connection.cursor()
 
-        rows = cursor.execute("SELECT name, config FROM recipe WHERE name = '{}'".format(recipe)).fetchall()
+        rows = cursor.execute("SELECT name, config, createdAt FROM recipe WHERE name = '{}'".format(recipe)).fetchall()
 
         cursor.close()
 
         if len(rows) > 0:
-            return json.loads(rows[0][1])
+            result = json.loads(rows[0][1])
+            result["createdAt"] = rows[0][2]
+            return result
         else:
             return None
 
@@ -125,7 +130,7 @@ class Database:
         """Insert a new row"""
         cursor = self._connection.cursor()
 
-        result = cursor.execute("INSERT INTO recipe VALUES ('{}', '{}')".format(
+        result = cursor.execute("INSERT INTO recipe VALUES ('{}', '{}', datetime('now'))".format(
             recipe,
             json.dumps(configs)
         ))
@@ -139,13 +144,14 @@ class Database:
         result = []
 
         cursor = self._connection.cursor()
-        rows = cursor.execute("SELECT name, config FROM recipe").fetchall()
+        rows = cursor.execute("SELECT name, config, createdAt FROM recipe").fetchall()
         cursor.close()
 
         for row in rows:
             result.append({
                 "name": row[0],
-                "config": json.loads(row[1])
+                "config": json.loads(row[1]),
+                "createdAt": row[2]
             })
 
         return result

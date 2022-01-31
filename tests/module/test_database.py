@@ -33,6 +33,6 @@ def test_database():
     db.delete_host("c.com")
 
     assert db.insert_host("c.com", {"ip": "127.0.0.1"}) == 1
-    assert db.get_host("c.com") == {"ip": "127.0.0.1"}
+    assert db.get_host("c.com")["ip"] == "127.0.0.1"
     assert db.get_host("f.com") == None
     assert len(db.list_hosts()) == 1

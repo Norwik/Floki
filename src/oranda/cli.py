@@ -33,16 +33,19 @@ from oranda.module.table import Table
 def main():
     pass
 
+# Hosts command
 @click.group(help='Manage hosts')
 def host():
     pass
 
+# List host sub command
 @host.command(help='List hosts')
-@click.option("-t", "--tag", "tag", type=click.STRING, default="", help="Host tags")
+@click.option("-t", "--tag", "tag", type=click.STRING, default="", help="Host tag")
 @click.option("-o", "--output", "output", type=click.STRING, default="", help="Output format")
 def list(tag, output):
     return Hosts().init().list(tag, output)
 
+# Add host sub command
 @host.command(help='Add a host')
 @click.argument('name')
 @click.option("-c", "--connection", "connection", type=click.STRING, default="ssh", help="Connection type to the host")
@@ -51,8 +54,8 @@ def list(tag, output):
 @click.option("-u", "--user", "user", type=click.STRING, default="root", help="The user name to use when connecting to the host")
 @click.option("-pa", "--password", "password", type=click.STRING, default="", help="The password to use to authenticate to the host")
 @click.option("-s", "--ssh_private_key_file", "ssh_private_key_file", type=click.File(), default="", help="Private key file used by ssh")
-@click.option("-t", "--tag", "tag", type=click.STRING, default="", help="Host tags")
-def add(name, connection, host, port, user, password, ssh_private_key_file, tag):
+@click.option("-t", "--tags", "tags", type=click.STRING, default="", help="Host tags")
+def add(name, connection, host, port, user, password, ssh_private_key_file, tags):
     return Hosts().init().add(name, {
         "connection": connection,
         "host": host,
@@ -60,69 +63,83 @@ def add(name, connection, host, port, user, password, ssh_private_key_file, tag)
         "user": user,
         "password": password,
         "ssh_private_key_file": ssh_private_key_file,
-        "tag": tag.split(",") if "," in tag else tag
+        "tags": tags.split(",") if "," in tags else []
     })
 
+# Get host sub command
 @host.command(help='Get a host')
 @click.argument('name')
 @click.option("-o", "--output", "output", type=click.STRING, default="", help="Output format")
 def get(name, output):
     return Hosts().init().get(name, output)
 
+# Delete host sub command
 @host.command(help='Delete a host')
+@click.argument('name')
 def delete(name):
     return Hosts().init().delete(name)
 
-
+# Recipes command
 @click.group(help='Manage recipes')
 def recipe():
     pass
 
+# Add recipes sub command
 @recipe.command(help='Add a recipe')
 @click.argument('name')
 @click.option("-p", "--path", "path", type=click.Path(exists=True), default="", help="Path to the recipe")
-@click.option("-t", "--tag", "tag", type=click.STRING, default="", help="Recipe tags")
-def add(name, path):
+@click.option("-t", "--tags", "tags", type=click.STRING, default="", help="Recipe tags")
+def add(name, path, tags):
     return Recipes().init().add(name, {
         "path": path,
-        "tag": tag.split(",") if "," in tag else tag
+        "tags": tags.split(",") if "," in tags else []
     })
 
+# List recipes sub command
 @recipe.command(help='List all recipes')
-@click.option("-t", "--tag", "tag", type=click.STRING, default="", help="Recipe tags")
+@click.option("-t", "--tag", "tag", type=click.STRING, default="", help="Recipe tag")
 @click.option("-o", "--output", "output", type=click.STRING, default="", help="Output format")
 def list(tag, output):
     return Recipes().init().list(tag, output)
 
+# Get recipe sub command
 @recipe.command(help='Get a recipe')
 @click.argument('name')
 @click.option("-o", "--output", "output", type=click.STRING, default="", help="Output format")
 def get(name, output):
     return Recipes().init().get(name, output)
 
+# Delete recipe sub command
 @recipe.command(help='Delete a recipe')
+@click.argument('name')
 def delete(name):
     return Recipes().init().delete(name)
 
+# Manage configs command
 @click.group(help='Manage configs')
 def config():
     pass
 
+# Init configs sub command
 @config.command(help='Init configurations')
 def init():
     return Configs().init()
 
+# Edit configs sub command
 @config.command(help='Edit configurations')
 def edit():
     return Configs().edit()
 
+# Show configs sub command
 @config.command(help='Show configurations')
 def dump():
     return Configs().dump()
 
+# Register Commands
 main.add_command(host)
 main.add_command(recipe)
 main.add_command(config)
+
 
 if __name__ == '__main__':
     main()

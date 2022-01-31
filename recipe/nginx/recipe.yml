@@ -2,6 +2,7 @@ vars:
   version: v1.0.0
 
 templates:
+  # id : local path
   motd.j2: motd.j2
 
 handlers:
@@ -11,6 +12,12 @@ handlers:
       state: restarted
 
 tasks:
+  - name: check mandatory variables
+    assert:
+      that:
+        - version is defined
+    tags: [ common, oranda ]
+
   - name: set motd banner
     template:
       src: "motd.j2"
